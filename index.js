@@ -1,11 +1,16 @@
 const bitcore = require('reddcore');
 const electrum = require('./node_modules/reddcoin-electrum-js/electrum');
-
 const reddcoin = {
 
+    /*
+      Create basic wallet
+     */
     wallet: electrum.WalletFactory.standardWallet(),
     monitor: false,
 
+    /*
+      Outputs the addresses to console
+     */
     render: function () {
 
       var addresses = this.wallet.getAddresses();
@@ -19,6 +24,12 @@ const reddcoin = {
 
     },
 
+    /**
+     * Recovers account from seed, if account does not exist they will be created
+     * @param  string seed     [
+     * @param  string password
+     * @return null
+     */
     create: function (seed, password) {
 
         var monitor = electrum.NetworkMonitor;
@@ -36,32 +47,41 @@ const reddcoin = {
         this.render();
     },
 
+    /**
+     * Send a transaction - TODO: Test
+     * @return null
+     */
     send: function () {
         var addr = $("#toAddress").val(),
             amount = $("#amount").val();
         this.wallet.send(amount, addr, this.monitor);
     },
 
+    /**
+     * Get Current Wallet Instance
+     * @return object
+     */
     get: function(){
       return this.wallet;
     },
 
+    /**
+     * Generate a new BIP39 Seed and return
+     * @return string
+     */
     generateSeed: function(){
-      var t = electrum.WalletFactory.standardWallet();
-      return t.getNewSeed();
+      return this.wallet.getNewSeed();
     }
 
 }
 
 /*
-  Create / recover - needs confirmation
+  EG: Creating a new wallet, generate a new seed
+  reddcoin.generateSeed()
 
-  normally, you
+  This setup below is simply to demonstrate repeatable accounts and balances with access.
  */
+
 reddcoin.create('victory pilot network forward trend cup glass grape weird license melody shy', 'Asecurepassword@11');
 
 
-/*
-  EG: Creating a new wallet, generate a new seed
-  this.wallet.getNewSeed()
- */
