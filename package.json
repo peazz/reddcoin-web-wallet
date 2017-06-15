@@ -1,0 +1,16 @@
+{
+  "name": "rdd-electrum-js",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "reddcoin-electrum-js": "peazz/reddcoin-electrum-js",
+    "reddcore": "^0.1.40"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
