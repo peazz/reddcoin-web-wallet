@@ -2,7 +2,8 @@ const bitcore = require('reddcore');
 const electrum = require('./node_modules/reddcoin-electrum-js/electrum');
 
 const reddcoin = {
-    wallet: false,
+
+    wallet: electrum.WalletFactory.standardWallet(),
     monitor: false,
 
     render: function () {
@@ -21,9 +22,6 @@ const reddcoin = {
     create: function (seed, password) {
 
         var monitor = electrum.NetworkMonitor;
-
-        // init a wallet
-        this.wallet = electrum.WalletFactory.standardWallet(),
 
         // setup wallet password
         this.wallet.buildFromMnemonic(seed.trim(), password.trim());
@@ -46,12 +44,19 @@ const reddcoin = {
 
     get: function(){
       return this.wallet;
+    },
+
+    generateSeed: function(){
+      var t = electrum.WalletFactory.standardWallet();
+      return t.getNewSeed();
     }
 
 }
 
 /*
   Create / recover - needs confirmation
+
+  normally, you
  */
 reddcoin.create('victory pilot network forward trend cup glass grape weird license melody shy', 'Asecurepassword@11');
 
