@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "path": "^0.12.7",
     "reddcoin-electrum-js": "peazz/reddcoin-electrum-js",
     "reddcore": "^0.1.40"
   },
