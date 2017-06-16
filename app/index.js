@@ -1,5 +1,7 @@
-const bitcore = require('reddcore');
-const electrum = require('./node_modules/reddcoin-electrum-js/electrum');
+const bitcore = require('bitcore');
+const electrum = require('reddcoin-electrum-js/electrum');
+
+
 const reddcoin = {
 
     /*
