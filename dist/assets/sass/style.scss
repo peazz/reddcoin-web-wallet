@@ -1,3 +1,7 @@
+* {
+  outline: 0;
+}
+
 html, body {
   margin: 0;
   padding: 0;
@@ -14,15 +18,53 @@ body {
   line-height: 1.55;
 }
 
+#page {
+  width: 100%;
+  overflow: hidden;
+}
+
+/**
+ * Misc
+ */
+
 img {
   max-width: 100%;
   height: auto;
 }
 
+/**
+ * Forms
+ */
 input {
   width: 100%;
   line-height: 30px;
   padding: 0 1rem;
+}
+
+.form {
+  &__wrap {
+    margin-bottom: 15px;
+  }
+
+  input {
+    width: 480px;
+    line-height: 30px;
+    padding: 0 1rem;
+    display: inline-block;
+  }
+}
+
+button,
+input[type=submit],
+.button {
+  background: #1fbba6;
+  border: none;
+  color: white;
+  border-radius: 0;
+  font-size: 14px;
+  line-height: 30px;
+  padding: 0 1rem;
+  outline: 0;
 }
 
 /**
@@ -31,7 +73,8 @@ input {
 h1, h2, h3, h4, h5, h6 {
   line-height: 1;
   margin-top: 0;
-  color: #a2a2a2;
+  color: #111;
+  font-weight: 400;
 }
 
 /**
@@ -58,4 +101,9 @@ h1, h2, h3, h4, h5, h6 {
 
 #address-list {
   margin: 0 0 20px;
+}
+
+.address-info {
+  padding: 1rem;
+  border: 1px solid #e1e1e3;
 }

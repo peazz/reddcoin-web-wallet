@@ -1,3 +1,9 @@
+*, *:before, *:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  outline: 0; }
+
 html, body {
   margin: 0;
   padding: 0; }
@@ -33,6 +39,24 @@ input {
 .form__wrap {
   margin-bottom: 15px; }
 
+.form input {
+  width: 480px;
+  line-height: 30px;
+  padding: 0 1rem;
+  display: inline-block; }
+
+button,
+input[type=submit],
+.button {
+  background: #1fbba6;
+  border: none;
+  color: white;
+  border-radius: 0;
+  font-size: 14px;
+  line-height: 30px;
+  padding: 0 1rem;
+  outline: 0; }
+
 /**
  * Type
  */
@@ -61,3 +85,41 @@ h1, h2, h3, h4, h5, h6 {
 
 #address-list {
   margin: 0 0 20px; }
+
+.address-info {
+  padding: 1rem;
+  border: 1px solid #e1e1e3; }
+
+.address__item-send {
+  margin-bottom: 15px;
+  font-size: 13px; }
+  .address__item-send h3 {
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 10px; }
+
+/**
+ * Transactions
+ */
+.transactions {
+  list-style: none;
+  font-size: 13px;
+  border-bottom: 1px solid #e1e1e3;
+  padding: 0 0 10px;
+  line-height: 1; }
+  .transactions__header {
+    display: block;
+    margin: 0 0 10px;
+    font-weight: bold; }
+
+.transaction {
+  border-top: 1px solid #e1e1e3;
+  padding-top: 10px; }
+  .transaction__type {
+    background: #222;
+    color: white;
+    padding: 3px 5px;
+    font-size: 9px;
+    vertical-align: middle; }
+    .transaction__type-Received {
+      background: green; }

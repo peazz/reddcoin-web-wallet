@@ -38,10 +38,8 @@ module.exports = {
    * Send a transaction - TODO: Test
    * @return null
    */
-  send: function () {
-      var addr = $("#toAddress").val(),
-          amount = $("#amount").val();
-      this.wallet.send(amount, addr, this.monitor);
+  send: function (addr, amount) {
+    this.wallet.send(amount, addr, this.monitor);
   },
 
   /**

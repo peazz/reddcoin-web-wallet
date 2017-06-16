@@ -19,37 +19,45 @@
 
   </head>
   <body>
+    <!-- page -->
     <div id="page">
+      <!-- header -->
       <header id="header">
         <div class="logo">
           <img src="assets/img/Reddcoin-name.png" alt="Reddcoin Browser Wallet" />
         </div>
       </header>
+      <!-- /header -->
+
+      <!-- app -->
       <div id="app">
+        <!-- addresses -->
         <div id="addresses">
+          <!-- Address list -->
+          <div id="address-list"></div>
+          <!-- /Address List -->
 
-          <div id="address-list">
-
-            <div class="form">
-              <div class="form__wrap">
-                <h3>You can enter an existing seed or you may generate a new one</h3>
-                <input type="text" name="bip39seed" value="victory pilot network forward trend cup glass grape weird license melody shy"/>
-              </div>
-              <div class="form__wrap">
-                <button id="load-wallet">Load Wallet from BIP39 Seed</button>
-                <button id="generate-seed">Generate BIP39 Seed</button>
-              </div>
-
-              <div class="form__wrap">
-                <small>Note: The default seed will load the test wallet being developed with at current.</small>
-              </div>
-
+          <!-- form -->
+          <div class="form">
+            <div class="form__wrap">
+              <h3>You can enter an existing seed or you may generate a new one</h3>
+              <input type="text" name="bip39seed" value="victory pilot network forward trend cup glass grape weird license melody shy"/>
+            </div>
+            <div class="form__wrap">
+              <button id="load-wallet">Load Wallet from Seed</button>
+              <button id="generate-seed">Generate Seed</button>
             </div>
 
+            <div class="form__wrap">
+              <small>Note: The default seed will load the test wallet being developed with at current.</small>
+            </div>
           </div>
-
+          <!-- /form -->
         </div>
+        <!-- /addresses -->
       </div>
+      <!-- /app -->
     </div>
+    <!-- /page -->
   </body>
 </html>

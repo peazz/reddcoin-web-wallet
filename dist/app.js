@@ -90,7 +90,7 @@
 	  // when we receive the wallet balance update lets update it
 	  if (data.request.method == "blockchain.address.get_balance") {
 	    var addresses = wallet.getAddresses();
-	    (0, _reactDom.render)(_react2.default.createElement(_Addresses2.default, { addresses: addresses }), document.getElementById('address-list'));
+	    (0, _reactDom.render)(_react2.default.createElement(_Addresses2.default, { addresses: addresses, wallet: wallet }), document.getElementById('address-list'));
 	  }
 	});
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
@@ -32884,16 +32884,83 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	var transactions = {};
+
+	/**
+	 * formats the transactions into a associative
+	 * array
+	 */
+	function getFormattedTransactions(array) {
+
+	  for (var i = 0; i < array.length; i++) {
+
+	    if (typeof transactions[array[i].address] === 'undefined') {
+	      transactions[array[i].address] = {};
+	    }
+
+	    transactions[array[i].address][array[i].id] = array[0];
+	  }
+	}
+
+	/**
+	 * Address Component
+	 * @param {[type]} props [description]
+	 */
 	function Addresses(props) {
 
+	  function sendPayment(address) {
+	    alert(address);
+	  }
+
 	  var addresses = props.addresses;
+	  var wallet = props.wallet;
 	  var parts = '';
 
-	  for (var i = 0; i < addresses.length; i++) {
-	    var addr = addresses[i];
-	    var val = bitcore.util.formatValue(addr.confirmed) + ' RDD';
+	  if (addresses.length > 0) {
 
-	    parts += '<div>Address (' + addr.address + ') #' + i + ': ' + val + '</div>';
+	    // setup the transaction object
+	    getFormattedTransactions(wallet.getTransactions());
+
+	    for (var i = 0; i < addresses.length; i++) {
+	      var addr = addresses[i];
+	      var val = bitcore.util.formatValue(addr.confirmed) + ' RDD';
+
+	      parts += '<div class="address__item">';
+	      parts += 'Address (' + addr.address + ') #' + i + ': ' + val;
+
+	      /*
+	        If the address has transactions
+	       */
+	      if (typeof transactions[addr.address] !== 'undefined') {
+	        parts += '<ul class="transactions">';
+	        parts += '<li class="transactions__header">Transactions</li>';
+	        for (var transaction in transactions[addr.address]) {
+
+	          var current = transactions[addr.address][transaction];
+	          var type = current.type;
+	          var total = bitcore.util.formatValue(current.total);
+	          var id = '<a href="https://live.reddcoin.com/tx/' + current.id + '" target="_blank">' + current.id + '</a>';
+
+	          parts += '<li class="transaction"><span class="transaction__type transaction__type-' + type + '">' + type + '</span> ' + id + ': ' + total + ' RDD</li>';
+	        }
+
+	        parts += '</ul>';
+	      }
+
+	      /*
+	        Send a transaction
+	       */
+	      if (bitcore.util.formatValue(addr.confirmed) !== '0.00') {
+	        parts += '<div class="address__item-send">';
+	        parts += '<h3>Send a Payment</h3>';
+	        parts += '<input type="text" data-id="' + addr.address + '" style="width:auto;" placeholder="Amount to Send">';
+	        parts += '<input type="password" data-password-id="' + addr.address + '" style="width:auto;" placeholder="Password">';
+	        parts += '<button onClick={this.sendPayment.bind(this, addr.address)}>Send Payment</button>';
+	        parts += '</div>';
+	      }
+
+	      parts += '</div>';
+	    }
 	  }
 
 	  return _react2.default.createElement(
@@ -32904,7 +32971,7 @@
 	      null,
 	      'Associated Addresses'
 	    ),
-	    _react2.default.createElement('div', { dangerouslySetInnerHTML: { __html: parts } })
+	    _react2.default.createElement('div', { className: 'address-info', dangerouslySetInnerHTML: { __html: parts } })
 	  );
 	}
 
@@ -32912,9 +32979,9 @@
 
 /***/ }),
 /* 196 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-	/* WEBPACK VAR INJECTION */(function($) {"use strict";
+	"use strict";
 
 	/**
 	 * Handles Reddcoin Wallet
@@ -32954,9 +33021,7 @@
 	   * Send a transaction - TODO: Test
 	   * @return null
 	   */
-	  send: function send() {
-	    var addr = $("#toAddress").val(),
-	        amount = $("#amount").val();
+	  send: function send(addr, amount) {
 	    this.wallet.send(amount, addr, this.monitor);
 	  },
 
@@ -32977,7 +33042,6 @@
 	  }
 
 	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ })
 /******/ ]);

@@ -32,7 +32,7 @@ electrum.Mediator.event.on('dataReceived', function(data){
   // when we receive the wallet balance update lets update it
   if(data.request.method == "blockchain.address.get_balance"){
     var addresses = wallet.getAddresses();
-    render(<Addresses addresses={addresses}/>, document.getElementById('address-list'));
+    render(<Addresses addresses={addresses} wallet={wallet}/>, document.getElementById('address-list'));
   }
 
 });
