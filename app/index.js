@@ -1,89 +1,33 @@
-const bitcore = require('bitcore');
-const electrum = require('reddcoin-electrum-js/electrum');
+// core
+import React from 'react';
+import {render} from 'react-dom';
 
+// components
+import Addresses from './components/Addresses.js';
 
-const reddcoin = {
+// services
+import reddcoin from './services/reddcoin.js';
 
-    /*
-      Create basic wallet
-     */
-    wallet: electrum.WalletFactory.standardWallet(),
-    monitor: false,
+// react render ui
+//
 
-    /*
-      Outputs the addresses to console
-     */
-    render: function () {
-
-      var addresses = this.wallet.getAddresses();
-      var transactions = this.wallet.getTransactions();
-
-      for(var i = 0; i < addresses.length; i++){
-        var addr = addresses[i];
-        var val = bitcore.util.formatValue(addr.confirmed) + ' RDD';
-        console.log('Address ('+ addr.address  +') #' + i + ': ' + val);
-      }
-
-    },
-
-    /**
-     * Recovers account from seed, if account does not exist they will be created
-     * @param  string seed     [
-     * @param  string password
-     * @return null
-     */
-    create: function (seed, password) {
-
-        var monitor = electrum.NetworkMonitor;
-
-        // setup wallet password
-        this.wallet.buildFromMnemonic(seed.trim(), password.trim());
-
-        // response layer
-        this.monitor = monitor.start(this.wallet);
-
-        // init the wallet? need to confirm
-        this.wallet.activateAccount();
-
-        // output data
-        this.render();
-    },
-
-    /**
-     * Send a transaction - TODO: Test
-     * @return null
-     */
-    send: function () {
-        var addr = $("#toAddress").val(),
-            amount = $("#amount").val();
-        this.wallet.send(amount, addr, this.monitor);
-    },
-
-    /**
-     * Get Current Wallet Instance
-     * @return object
-     */
-    get: function(){
-      return this.wallet;
-    },
-
-    /**
-     * Generate a new BIP39 Seed and return
-     * @return string
-     */
-    generateSeed: function(){
-      return this.wallet.getNewSeed();
-    }
-
-}
-
-/*
-  EG: Creating a new wallet, generate a new seed
-  reddcoin.generateSeed()
-
-  This setup below is simply to demonstrate repeatable accounts and balances with access.
- */
-
+// create a new wallet
 reddcoin.create('victory pilot network forward trend cup glass grape weird license melody shy', 'Asecurepassword@11');
+
+// get the wallet object
+const wallet = reddcoin.get();
+// listen for data event
+electrum.Mediator.event.on('dataReceived', function(data){
+
+
+  // when we receive the wallet balance update lets update it
+  if(data.request.method == "blockchain.address.get_balance"){
+    var addresses = wallet.getAddresses();
+
+    render(<Addresses addresses={addresses}/>, document.getElementById('app'));
+  }
+
+});
+
 
 
