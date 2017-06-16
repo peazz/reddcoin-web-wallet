@@ -11,18 +11,14 @@ module.exports = {
     path: path.resolve(__dirname, 'dist')
   },
   module: {
-    loaders: [
-      {
-        loader: 'babel-loader',
-        query: {
-          presets: ['react', 'es2015']
-        },
-        // match files based on pattern
-        test: /\.js$/,
-        // ignore files matching pattern
-        exclude: ['/node_modules/', '/app/deps/']
-      }
-    ]
+    loaders: [{
+      loader: 'babel-loader',
+      query: {
+        presets: ['react', 'es2015']
+      },
+      test: [/\.js$/,/\.jsx$/],
+      exclude: ['/node_modules/', '/app/deps/']
+    }]
   },
   resolve: {
     root: path.resolve('./node_modules'),

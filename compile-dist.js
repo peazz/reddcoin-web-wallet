@@ -28,3 +28,17 @@ fs.copy(source, dest, function (err) {
     console.log('Copied to ' + dest);
 
 });
+
+var source = './app/assets';
+var dest = './dist/assets';
+
+fs.copy(source, dest, function (err) {
+
+    if (err)
+    {
+        return console.error(err);
+    }
+
+    console.log('Copied to ' + dest);
+
+});

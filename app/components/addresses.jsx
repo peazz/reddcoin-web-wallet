@@ -9,7 +9,7 @@ function Addresses (props) {
     var addr = addresses[i];
     var val = bitcore.util.formatValue(addr.confirmed) + ' RDD';
 
-    parts += '<div data-id="'+ addr.address +'">Address ('+ addr.address  +') #' + i + ': <span class="value">' + val + '</span></div>';
+    parts += '<div>Address ('+ addr.address  +') #' + i + ': ' + val + '</div>';
   }
 
   return (

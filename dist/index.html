@@ -4,6 +4,10 @@
     <meta charset="utf-8" />
     <title>Reddcoin HD Web Wallet</title>
 
+    <!-- styles -->
+    <link href="assets/css/style.css" rel="stylesheet" />
+    <!-- /styles -->
+
     <!-- core expose -->
     <script src="deps/bitcore.js"></script>
     <script src="deps/electrum.js"></script>
@@ -11,12 +15,19 @@
       var bitcore = require('bitcore');
       var electrum = require('electrum');
     </script>
-    <!-- core expose end -->
+    <!-- /core expose  -->
 
   </head>
   <body>
+    <header id="header">
+      <div class="logo">
+        <img src="assets/img/Reddcoin-name.png" alt="Reddcoin Browser Wallet" />
+      </div>
+    </header>
     <div id="app">
+      <div id="addresses">
 
+      </div>
     </div>
   <script type="text/javascript" src="app.js"></script></body>
 </html>
