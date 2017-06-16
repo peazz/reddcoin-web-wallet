@@ -13,7 +13,10 @@ function Addresses (props) {
   }
 
   return (
-    <div id="addresses" dangerouslySetInnerHTML={{__html: parts}}></div>
+    <div>
+      <h1>Associated Addresses</h1>
+      <div dangerouslySetInnerHTML={{__html: parts}}></div>
+    </div>
   )
 }
 

@@ -2,3 +2,79 @@ html, body {
   margin: 0;
   padding: 0;
 }
+
+html {
+  font-size: 100%;
+  font-family: sans-serif;
+  font-weight: 100;
+}
+
+body {
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+#page {
+  width: 100%;
+  overflow: hidden;
+}
+
+/**
+ * Misc
+ */
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/**
+ * Forms
+ */
+input {
+  width: 100%;
+  line-height: 30px;
+  padding: 0 1rem;
+}
+
+.form {
+  &__wrap {
+    margin-bottom: 15px;
+  }
+}
+
+/**
+ * Type
+ */
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1;
+  margin-top: 0;
+  color: #111;
+  font-weight: 400;
+}
+
+/**
+ * Header
+ */
+
+#header {
+  background: #f1f1f3;
+  padding: 16px;
+  padding: 1rem;
+
+  .logo {
+    width: 120px;
+  }
+}
+
+/**
+ * Addresses
+ */
+#addresses {
+  padding: 16px;
+  padding: 1rem;
+}
+
+#address-list {
+  margin: 0 0 20px;
+}
