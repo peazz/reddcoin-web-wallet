@@ -50,53 +50,161 @@
 	var reddcoin = __webpack_require__(1);
 	var wallet = reddcoin.getWallet();
 
+	// Angular Services Register
+	var localStorage = __webpack_require__(2);
+	browserWallet.service('LocalStorageService', localStorage);
+
+	// controllers
+	browserWallet.controller('ticker', function ($scope, $http, $interval, LocalStorageService) {
+
+	  // reddcoin ticker api url
+	  $scope.marketDataUrl = 'http://api.coinmarketcap.com/v1/ticker/reddcoin/';
+
+	  // holds reddcoin market data
+	  $scope.marketData = {
+	    loading: true,
+	    info: {}
+	  };
+
+	  $scope.getPriceTickerData = function () {
+
+	    if (LocalStorageService.get('rddTickerData')) {
+
+	      $scope.marketData.info = JSON.parse(LocalStorageService.get('rddTickerData'));
+	      $scope.marketData.loading = false;
+	    } else {
+
+	      $http.get($scope.marketDataUrl).then(function (response) {
+	        var data = JSON.stringify(response.data[0]);
+	        LocalStorageService.set('rddTickerData', data);
+	        $scope.marketData = JSON.parse(data);
+	        $scope.marketData.loading = false;
+	      });
+	    }
+
+	    // start fetching on timer
+	    $scope.intervalGetPriceTickerData();
+	  };
+
+	  $scope.intervalGetPriceTickerData = function () {
+	    $interval(function () {
+	      $scope.marketData.loading = true;
+	      $http.get($scope.marketDataUrl).then(function (response) {
+	        var data = JSON.stringify(response.data[0]);
+	        LocalStorageService.set('rddTickerData', data);
+	        $scope.marketData.info = JSON.parse(data);
+	        $scope.marketData.loading = false;
+	      });
+	    }, 10000);
+	  };
+
+	  $scope.setPercentageColor = function (number) {
+	    if (number < 0) {
+	      return 'percentage-down';
+	    } else {
+	      return 'percentage-up';
+	    }
+	  };
+
+	  /*
+	    Start
+	   */
+	  $scope.init = function () {
+	    $scope.getPriceTickerData();
+	  };
+
+	  $scope.init();
+	});
+
 	// angular
 	browserWallet.controller('addresses', function ($scope) {
 
-	  /*
-	    Our Seed Object
-	   */
+	  // wallet seed
 	  $scope.bip39seed = 'victory pilot network forward trend cup glass grape weird license melody shy';
 
-	  /*
-	    Password
-	   */
+	  // temp password
 	  $scope.password = '';
 
-	  /*
-	    Holds available addresses
-	   */
+	  // addresses
 	  $scope.addresses = {};
 
-	  /*
-	    Holds Payment Data
-	   */
+	  // transactions
+	  $scope.transactions = [];
+
+	  // outgoing payment data
 	  $scope.payment = {};
 
+	  // show seed form
+	  $scope.showForm = true;
+
+	  $scope.isLoading = false;
+
+	  /*
+	    Wallet Functions
+	   */
 	  $scope.loadWallet = function () {
 	    reddcoin.create($scope.bip39seed, $scope.password); // we wont be asking for real password until required
+	    $scope.isLoading = true;
 	  };
 
 	  $scope.generateSeed = function () {
 	    $scope.bip39seed = wallet.getNewSeed();
 	  };
 
-	  $scope.formatBalance = function (addr) {
-	    return bitcore.util.formatValue(angular.copy(addr.confirmed));
+	  $scope.formatBalance = function (num) {
+	    return bitcore.util.formatValue(angular.copy(num));
 	  };
 
 	  $scope.submitPayment = function (addressToSendFrom) {
 	    reddcoin.sendPayment($scope.payment.sendTo, $scope.payment.amount, addressToSendFrom, $scope.payment.password);
+	    $scope.isLoading = true;
+	  };
+
+	  /*
+	    Helpers
+	   */
+	  $scope.paymentFormIndex = -1;
+	  $scope.showPaymentForm = function (index) {
+	    if ($scope.paymentFormIndex === index) {
+	      $scope.paymentFormIndex = -1;
+	    } else {
+	      $scope.paymentFormIndex = index;
+	    }
 	  };
 
 	  /*
 	    Handle Electrum Data
 	   */
+
+	  // browser api creates addresses
+	  electrum.Mediator.event.on('addressCreated', function (data) {
+
+	    if (typeof $scope.addresses[data.address] === 'undefined') {
+	      $scope.addresses[data.address] = {};
+	    }
+
+	    $scope.addresses[data.address] = data;
+	    $scope.showForm = false;
+	    $scope.$evalAsync();
+	  });
+
+	  // wallet transaction
+	  electrum.Mediator.event.on('transactionAdded', function () {
+	    $scope.transactions = wallet.getTransactions();
+	    $scope.$evalAsync();
+	  });
+
+	  electrum.Mediator.event.on('idle', function (data) {
+	    $scope.isLoading = false;
+	    $scope.$evalAsync();
+	  });
+
+	  // anything in from requests here
 	  electrum.Mediator.event.on('dataReceived', function (data) {
 	    // when we receive the wallet balance update lets update it
 	    if (data.request.method == "blockchain.address.get_balance") {
-	      $scope.addresses = wallet.getAddresses();
-	      $scope.$apply();
+	      //$scope.addresses = wallet.getAddresses();
+	      //$scope.$apply();
 	    }
 	  });
 	});
@@ -105,7 +213,7 @@
 /* 1 */
 /***/ (function(module, exports) {
 
-	"use strict";
+	'use strict';
 
 	/**
 	 * Handles Reddcoin Wallet
@@ -131,14 +239,21 @@
 
 	    var monitor = electrum.NetworkMonitor;
 
-	    // setup wallet password
-	    this.wallet.buildFromMnemonic(seed.trim(), password.trim());
+	    // checks its a valid mnemonic
+	    if (this.wallet.checkSeed(seed)) {
 
-	    // response layer
-	    this.monitor = monitor.start(this.wallet);
+	      // setup wallet password
+	      this.wallet.buildFromMnemonic(seed.trim(), password.trim());
 
-	    // init the wallet? need to confirm
-	    this.wallet.activateAccount();
+	      // response layer
+	      this.monitor = monitor.start(this.wallet);
+
+	      // init the wallet? need to confirm
+	      // expects index, name, type
+	      this.wallet.activateAccount(0, '');
+
+	      this.wallet.toObject();
+	    }
 	  },
 
 	  /**
@@ -165,8 +280,46 @@
 	   */
 	  generateSeed: function generateSeed() {
 	    return this.wallet.getNewSeed();
+	  },
+
+	  /**
+	   * Get a sorted array of transactions
+	   * no dupes
+	   */
+	  getTransactions: function getTransactions() {
+
+	    var transactions = void 0;
+	    var array = this.wallet.getTransactions();
+
+	    for (var i = 0; i < array.length; i++) {
+
+	      if (typeof transactions[array[i].address] === 'undefined') {
+	        transactions[array[i].address] = {};
+	      }
+
+	      transactions[array[i].address][array[i].id] = array[0];
+	    }
+
+	    return transactions;
 	  }
 
+	};
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+	"use strict";
+
+	module.exports = function () {
+
+	  this.get = function (id) {
+	    return null !== localStorage.getItem(id) ? localStorage.getItem(id) : false;
+	  }, this.set = function (id, data) {
+	    localStorage.setItem(id, data);
+	  }, this.remove = function (id) {
+	    localStorage.removeItem($id);
+	  };
 	};
 
 /***/ })

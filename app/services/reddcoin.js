@@ -23,14 +23,21 @@ module.exports = {
 
       var monitor = electrum.NetworkMonitor;
 
-      // setup wallet password
-      this.wallet.buildFromMnemonic(seed.trim(), password.trim());
+      // checks its a valid mnemonic
+      if(this.wallet.checkSeed(seed)){
 
-      // response layer
-      this.monitor = monitor.start(this.wallet);
+        // setup wallet password
+        this.wallet.buildFromMnemonic(seed.trim(), password.trim());
 
-      // init the wallet? need to confirm
-      this.wallet.activateAccount();
+        // response layer
+        this.monitor = monitor.start(this.wallet);
+
+        // init the wallet? need to confirm
+        // expects index, name, type
+        this.wallet.activateAccount(0, '');
+
+        this.wallet.toObject();
+      }
 
   },
 
@@ -59,6 +66,28 @@ module.exports = {
    */
   generateSeed: function(){
     return this.wallet.getNewSeed();
+  },
+
+  /**
+   * Get a sorted array of transactions
+   * no dupes
+   */
+  getTransactions: function(){
+
+
+    let transactions;
+    let array = this.wallet.getTransactions();
+
+    for(let i = 0; i < array.length; i++){
+
+      if(typeof transactions[ array[i].address ] === 'undefined'){
+        transactions[ array[i].address ] = {};
+      }
+
+      transactions[ array[i].address ][ array[i].id ] = array[0]
+    }
+
+    return transactions;
   }
 
 }

@@ -19,6 +19,7 @@ html {
 body {
   font-size: 16px;
   line-height: 1.55;
+  background: #fafafa !important;
 }
 
 #page {
@@ -36,12 +37,17 @@ img {
 }
 
 /**
+ * Grid
+ */
+@import "global/bootstrap";
+
+/**
  * Forms
  */
 input {
   width: 100%;
-  line-height: 30px;
-  padding: 0 1rem;
+  line-height: 40px;
+  padding: 0 1.2rem;
 }
 
 .form {
@@ -50,9 +56,8 @@ input {
   }
 
   input {
-    width: 480px;
-    line-height: 30px;
-    padding: 0 1rem;
+    line-height: 40px;
+    padding: 0 1.2rem;
     display: inline-block;
   }
 }
@@ -65,8 +70,8 @@ input[type=submit],
   color: white;
   border-radius: 0;
   font-size: 14px;
-  line-height: 30px;
-  padding: 0 1rem;
+  line-height: 40px;
+  padding: 0 1.2rem;
   outline: 0;
 }
 
@@ -85,19 +90,32 @@ h1, h2, h3, h4, h5, h6 {
  */
 
 #header {
-  background: #f1f1f3;
-  padding: 16px;
-  padding: 1rem;
+  background: white;
+  padding: 13px 13px 16px;
+  margin-bottom: 15px;
+  overflow: hidden;
+  border-bottom: 1px solid #f1f1f3;
 
   .logo {
-    width: 120px;
+    width: 158px;
+    float: left;
+    margin: 16px 0;
   }
+}
+
+/**
+ * Hero
+ */
+.hero {
+  background: url(/assets/img/globe2.jpg) center center no-repeat;
+  background-size: cover !important;
 }
 
 /**
  * Addresses
  */
-#addresses {
+#addresses,
+#transactions {
   padding: 16px;
   padding: 1rem;
 }
@@ -108,7 +126,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .address-info {
   padding: 1rem;
-  border: 1px solid #e1e1e3;
+  border: 1px solid #f1f1f3;
 }
 
 .address {
@@ -140,7 +158,6 @@ h1, h2, h3, h4, h5, h6 {
 .transactions {
   list-style: none;
   font-size: 13px;
-  border-bottom: 1px solid #e1e1e3;
   padding: 0 0 10px;
   line-height: 1;
 
@@ -152,9 +169,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .transaction {
-  border-top: 1px solid #e1e1e3;
-  padding-top: 10px;
-
   &__type {
     background: #222;
     color: white;
@@ -164,6 +178,62 @@ h1, h2, h3, h4, h5, h6 {
 
     &-Received {
       background: green;
+    }
+  }
+}
+
+/**
+ * Price Ticker
+ */
+
+.ticker {
+  width: 318px;
+  float: right;
+  padding: 10px 17px;
+  margin: -16px 0;
+  border-left: 1px solid #f1f1f3;
+  border-right: 1px solid #f1f1f3;
+
+  .percentage-down {
+    color: red;
+  }
+
+  .percentage-up {
+    color: green;
+  }
+
+  ul {
+    padding: 0;
+    margin: 0;
+
+    li {
+      width: 33.33333%;
+      float: left;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 11px !important;
+    }
+
+    &:last-of-type {
+      border-top: 1px solid #f1f1f3;
+      clear: both;
+      overflow: hidden;
+      margin: 0 -17px -10px;
+      padding: 10px 15px;
+    }
+  }
+
+  &__currency {
+    width: 50% !important;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px !important;
+
+    span {
+      font-size: 23px;
+      display: block;
+      font-weight: 100;
     }
   }
 }

@@ -19,11 +19,20 @@ html {
 body {
   font-size: 16px;
   line-height: 1.55;
+  background: #fafafa !important;
 }
 
 #page {
   width: 100%;
   overflow: hidden;
+}
+
+html,
+body,
+#page,
+#app,
+.hero {
+  height: 100%;
 }
 
 /**
@@ -36,12 +45,17 @@ img {
 }
 
 /**
+ * Grid
+ */
+@import "global/bootstrap";
+
+/**
  * Forms
  */
 input {
   width: 100%;
-  line-height: 30px;
-  padding: 0 1rem;
+  line-height: 40px;
+  padding: 0 1.2rem;
 }
 
 .form {
@@ -50,9 +64,8 @@ input {
   }
 
   input {
-    width: 480px;
-    line-height: 30px;
-    padding: 0 1rem;
+    line-height: 40px;
+    padding: 0 1.2rem;
     display: inline-block;
   }
 }
@@ -65,8 +78,8 @@ input[type=submit],
   color: white;
   border-radius: 0;
   font-size: 14px;
-  line-height: 30px;
-  padding: 0 1rem;
+  line-height: 40px;
+  padding: 0 1.2rem;
   outline: 0;
 }
 
@@ -80,24 +93,142 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 400;
 }
 
+.heading {
+  font-size: 16px;
+
+  /* text-transform: uppercase; */
+  font-weight: 500;
+  letter-spacing: 0.023em;
+  margin-bottom: 15px;
+}
+
 /**
  * Header
  */
 
 #header {
-  background: #f1f1f3;
-  padding: 16px;
-  padding: 1rem;
+  background: white;
+  padding: 13px 13px 16px;
+  overflow: hidden;
+  border-bottom: 1px solid #f1f1f3;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999999;
 
   .logo {
-    width: 120px;
+    width: 158px;
+    float: left;
+    margin: 16px 0;
   }
+}
+
+/**
+ * Footer
+ */
+.footer,
+footer {
+  margin-top: 35px;
+  color: #888;
+}
+
+/**
+ * Hero
+ */
+.hero {
+  background: url(../img/globe2.jpg) center center no-repeat;
+  background-size: cover !important;
+  position: relative;
+  color: white;
+
+  &:after {
+    content: '';
+    background: black;
+    opacity: 0.7;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+
+    @media screen and (min-width: 768px) {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate3d(-50%, -50%, 0);
+    }
+  }
+
+  h1, h3, p {
+    color: white;
+  }
+
+  h1 {
+    font-size: 60px;
+    font-weight: 100;
+    margin: 0 0 35px;
+  }
+
+  h3 {
+    font-weight: 300;
+    margin: 0 0 35px;
+  }
+
+  button {
+    width: 250px;
+    display: inline-block;
+    text-align: center;
+  }
+
+  input {
+    border: none !important;
+  }
+
+  .form {
+    &__wrap {
+      .row {
+        margin-bottom: 25px;
+      }
+    }
+
+    &__message {
+      display: block;
+      line-height: 1;
+      margin-top: 35px;
+    }
+  }
+}
+
+#theApp {
+  margin-top: 127px;
+}
+
+#something-loading {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #ffcc00;
+  color: #222;
+  z-index: 999;
+  text-align: center;
+  font-size: 19px;
+  padding: 18px;
 }
 
 /**
  * Addresses
  */
-#addresses {
+#addresses,
+#transactions {
   padding: 16px;
   padding: 1rem;
 }
@@ -108,14 +239,15 @@ h1, h2, h3, h4, h5, h6 {
 
 .address-info {
   padding: 1rem;
-  border: 1px solid #e1e1e3;
+  border: 1px solid #f1f1f3;
 }
 
 .address {
   &__item {
-    background: #fafafa;
+    background: white;
     padding: 1rem;
     margin-bottom: 15px;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
   }
 
   &__item-send {
@@ -140,7 +272,6 @@ h1, h2, h3, h4, h5, h6 {
 .transactions {
   list-style: none;
   font-size: 13px;
-  border-bottom: 1px solid #e1e1e3;
   padding: 0 0 10px;
   line-height: 1;
 
@@ -152,18 +283,74 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .transaction {
-  border-top: 1px solid #e1e1e3;
-  padding-top: 10px;
+  margin-bottom: 7px;
+  font-size: 15px;
 
   &__type {
     background: #222;
     color: white;
     padding: 3px 5px;
-    font-size: 9px;
+    font-size: 8px;
     vertical-align: middle;
 
     &-Received {
       background: green;
+    }
+  }
+}
+
+/**
+ * Price Ticker
+ */
+
+.ticker {
+  width: 318px;
+  float: right;
+  padding: 10px 17px;
+  margin: -16px 0;
+  border-left: 1px solid #f1f1f3;
+  border-right: 1px solid #f1f1f3;
+
+  .percentage-down {
+    color: red;
+  }
+
+  .percentage-up {
+    color: green;
+  }
+
+  ul {
+    padding: 0;
+    margin: 0;
+
+    li {
+      width: 33.33333%;
+      float: left;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 11px !important;
+    }
+
+    &:last-of-type {
+      border-top: 1px solid #f1f1f3;
+      clear: both;
+      overflow: hidden;
+      margin: 0 -17px -10px;
+      padding: 10px 15px;
+    }
+  }
+
+  &__currency {
+    width: 50% !important;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px !important;
+
+    span {
+      font-size: 23px;
+      display: block;
+      font-weight: 100;
     }
   }
 }

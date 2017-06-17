@@ -26,68 +26,109 @@
   </head>
   <body>
     <!-- page -->
-    <div id="page">
+    <div id="page" ng-app="browserWallet">
       <!-- header -->
       <header id="header">
-        <div class="logo">
-          <img src="assets/img/Reddcoin-name.png" alt="Reddcoin Browser Wallet" />
+        <div class="container">
+          <div class="logo">
+            <img src="assets/img/Reddcoin-name.png" alt="Reddcoin Browser Wallet" />
+          </div>
+
+          <div id="ticker" class="ticker" ng-controller="ticker">
+            <span ng-show="marketData.loading"></span>
+            <ul>
+              <li class="ticker__currency">USD <span>{{ marketData.info.price_usd }}</span></li>
+              <li class="ticker__currency">BTC <span>{{ marketData.info.price_btc }}</span> </li>
+            </ul>
+            <ul>
+              <li>1hr Change: <span class="{{ setPercentageColor( marketData.info.percent_change_1h ) }}">{{ marketData.info.percent_change_1h }}</span></li>
+              <li>24hr change: <span class="{{ setPercentageColor( marketData.info.percent_change_24h ) }}">{{ marketData.info.percent_change_24h }}</span></li>
+              <li>7D change: <span class="{{ setPercentageColor( marketData.info.percent_change_7d ) }}">{{ marketData.info.percent_change_7d }}</span></li>
+            </ul>
+          </div>
         </div>
       </header>
       <!-- /header -->
-
       <!-- app -->
-      <div id="app" ng-app="browserWallet">
-        <div ng-controller="addresses" id="addresses">
+      <div id="app" ng-controller="addresses">
 
-          <div class="address__item" ng-if="addresses.length > 0" ng-repeat="obj in addresses">
+        <div class="hero" ng-if="showForm">
+          <div class="container">
+            <div class="row">
+              <div class="form col-sm-12">
+                <div class="form__wrap">
+                  <h1>Reddcoin HD Browser Wallet</h1>
+                  <h3 ng-show="!bip39seed">Enter your Mnemonic Phrase to Load Your Wallet</h3>
 
 
+                  <div class="row">
+                    <span class="col-md-8">
+                      <input type="text" ng-model="bip39seed" placeholder="Wallet Seed"/>
+                    </span>
 
-            {{ obj.address }} - {{ formatBalance(obj) }} RDD <br />
+                    <span class="col-md-4">
+                      <input type="password" ng-model="password" placeholder="Wallet Password"/>
+                    </span>
+                  </div>
+
+                  <button ng-click="loadWallet()">Load Wallet</button>
+
+                  <button ng-click="generateSeed()">Generate Seed</button>
 
 
-
-            <!-- will add support to view the transactions back soon
-            <ul class="transactions">
-              <li class="transactions__header">Transactions</li>
-              <li class="transaction"></li>
-            </ul>
-            -->
-
-            <div class="address__item-send" ng-if="formatBalance(obj) !== '0.00' ">
-
-              <h3>Send a Payment</h3>
-              <input type="text" ng-model="payment.sendTo" placeholder="Send to RDD Address">
-              <input type="text" ng-model="payment.amount" placeholder="Amount to Send">
-              <input type="password" ng-model="payment.password" placeholder="Password">
-              <button ng-click="submitPayment( obj.address )">Send Payment</button>
+                  <div class="form__message"><small>Note: The default seed will load the test wallet being developed with at current.</small></div>
+                </div>
+              </div><!-- /form -->
             </div>
           </div>
-
-          <!-- form -->
-          <div class="form">
-
-            <div class="form__wrap">
-              <h3>You can enter an existing seed or you may generate a new one</h3>
-              <input type="text" ng-model="bip39seed" placeholder="Wallet Seed"/>
-            </div>
-
-            <div class="form__wrap">
-              <input type="password" ng-model="password" placeholder="Wallet Password" style="width:150px;"/>
-              <button ng-click="loadWallet()">Load Wallet from Seed</button>
-              <button ng-click="generateSeed()">Generate Seed</button>
-            </div>
-
-            <div class="form__wrap">
-              <small>Note: The default seed will load the test wallet being developed with at current.</small>
-            </div>
-          </div>
-          <!-- /form -->
-
         </div>
-      </div>
-      <!-- /app -->
-    </div>
-    <!-- /page -->
+
+        <div class="container" id="theApp">
+          <div class="row">
+
+            <div id="addresses" class="col-md-4">
+              <h2 ng-if="!showForm" class="heading">Wallet Addresses</h2>
+              <div class="address__item" ng-repeat="(address, obj) in addresses track by $index">
+                {{ address }} - {{ formatBalance(obj.confirmed) }} RDD <br />
+                <button ng-if="formatBalance(obj.confirmed) !== '0.00'" ng-click="showPaymentForm($index)">
+                  <span ng-if="paymentFormIndex === $index">Close</span>
+                  <span ng-if="paymentFormIndex !== $index">Send Payment</span>
+                </button>
+                <div class="address__item-send" ng-if="formatBalance(obj.confirmed) !== '0.00' && paymentFormIndex === $index">
+                  <h3>Send a Payment</h3>
+                  <input type="text" ng-model="payment.sendTo" placeholder="Send to RDD Address">
+                  <input type="text" ng-model="payment.amount" placeholder="Amount to Send">
+                  <input type="password" ng-model="payment.password" placeholder="Password">
+                  <button ng-click="submitPayment( address )">
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </div><!-- /#addresses -->
+
+            <div id="transactions" class="col-md-8" ng-if="!showForm">
+              <h2 class="heading">Wallet Transactions</h2>
+              <ul class="transactions">
+                <li ng-repeat="transaction in transactions" class="transaction">
+                  <span class="transaction__type transaction__type-{{ transaction.type }}">{{ transaction.type }}</span>
+                  <a href="https://live.reddcoin.com/tx/{{ transaction.id }}" target="blank">
+                    {{ formatBalance( transaction.total ) }} RDD
+                    <span ng-if="transaction.type === 'Received'">from</span>
+                    <span ng-if="transaction.type === 'Sent'">to</span>
+                    {{ transaction.address }}
+                  </a>
+                </li>
+              </ul>
+            </div><!-- /#transactions -->
+          </div><!-- /.row -->
+
+          <footer>
+              &copy; Copyright 2017, <a href="http://reddcoin.com" target="_blank">Reddcoin Team</a>,<a href="http://pixelbin.com" target="_blank">Pixebin</a>
+          </footer>
+        </div><!-- /.container -->
+
+        <div id="something-loading" ng-show="isLoading">Loading...</div>
+      </div><!-- /app -->
+    </div><!-- /page -->
   </body>
 </html>

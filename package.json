@@ -5,6 +5,8 @@
   "main": "index.js",
   "dependencies": {
     "angular": "^1.6.4",
+    "bootstrap": "^3.3.7",
+    "bootstrap-sass": "^3.3.7",
     "jquery": "^3.2.1",
     "path": "^0.12.7",
     "react": "^15.6.1",
