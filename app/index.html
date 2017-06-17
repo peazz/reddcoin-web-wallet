@@ -10,10 +10,16 @@
 
     <!-- core expose -->
     <script src="deps/bitcore.js"></script>
-    <script src="deps/electrum.js"></script>
+    <script src="../node_modules/reddcoin-electrum-js/browser/electrum.js"></script>
+     <script src="deps/angular.js"></script>
+
     <script>
+      // expose reddcore browser
       var bitcore = require('bitcore');
+      // expose electrum browser
       var electrum = require('electrum');
+      // setup the angular app
+      var browserWallet = angular.module('browserWallet', []);
     </script>
     <!-- /core expose  -->
 
@@ -30,22 +36,46 @@
       <!-- /header -->
 
       <!-- app -->
-      <div id="app">
-        <!-- addresses -->
-        <div id="addresses">
-          <!-- Address list -->
-          <div id="address-list"></div>
-          <!-- /Address List -->
+      <div id="app" ng-app="browserWallet">
+        <div ng-controller="addresses" id="addresses">
+
+          <div class="address__item" ng-if="addresses.length > 0" ng-repeat="obj in addresses">
+
+
+
+            {{ obj.address }} - {{ formatBalance(obj) }} RDD <br />
+
+
+
+            <!-- will add support to view the transactions back soon
+            <ul class="transactions">
+              <li class="transactions__header">Transactions</li>
+              <li class="transaction"></li>
+            </ul>
+            -->
+
+            <div class="address__item-send" ng-if="formatBalance(obj) !== '0.00' ">
+
+              <h3>Send a Payment</h3>
+              <input type="text" ng-model="payment.sendTo" placeholder="Send to RDD Address">
+              <input type="text" ng-model="payment.amount" placeholder="Amount to Send">
+              <input type="password" ng-model="payment.password" placeholder="Password">
+              <button ng-click="submitPayment( obj.address )">Send Payment</button>
+            </div>
+          </div>
 
           <!-- form -->
           <div class="form">
+
             <div class="form__wrap">
               <h3>You can enter an existing seed or you may generate a new one</h3>
-              <input type="text" name="bip39seed" value="victory pilot network forward trend cup glass grape weird license melody shy"/>
+              <input type="text" ng-model="bip39seed" placeholder="Wallet Seed"/>
             </div>
+
             <div class="form__wrap">
-              <button id="load-wallet">Load Wallet from Seed</button>
-              <button id="generate-seed">Generate Seed</button>
+              <input type="password" ng-model="password" placeholder="Wallet Password" style="width:150px;"/>
+              <button ng-click="loadWallet()">Load Wallet from Seed</button>
+              <button ng-click="generateSeed()">Generate Seed</button>
             </div>
 
             <div class="form__wrap">
@@ -53,8 +83,8 @@
             </div>
           </div>
           <!-- /form -->
+
         </div>
-        <!-- /addresses -->
       </div>
       <!-- /app -->
     </div>

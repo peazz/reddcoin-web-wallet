@@ -1,38 +1,55 @@
-// core
-import React from 'react';
-import {render} from 'react-dom';
-
-// react components
-import Addresses from './components/Addresses.jsx';
-
 // app services
-import reddcoin from './services/reddcoin.js';
+const reddcoin = require('./services/reddcoin.js');
+const wallet = reddcoin.getWallet();
 
-const wallet = reddcoin.get();
+// angular
+browserWallet.controller('addresses', function($scope) {
 
-// create / recover a new wallet
-let loadWalletButton = $('#load-wallet');
-loadWalletButton.click(function(){
-  let seed = $('input[name=bip39seed]').val();
-  let password = 'dummy'; // we wont require a password until an unlock is required
-  reddcoin.create(seed, password);
-});
+  /*
+    Our Seed Object
+   */
+  $scope.bip39seed = 'victory pilot network forward trend cup glass grape weird license melody shy';
 
-// generate a seed
-let generateSeedButton = $('#generate-seed');
-generateSeedButton.click(function(){
-  let seed = wallet.getNewSeed();
-  $('input[name=bip39seed]').val(seed);
-});
+  /*
+    Password
+   */
+  $scope.password = '';
 
+  /*
+    Holds available addresses
+   */
+  $scope.addresses = {};
 
-// listen for data event emitted from electrum api
-electrum.Mediator.event.on('dataReceived', function(data){
+  /*
+    Holds Payment Data
+   */
+  $scope.payment = {};
 
-  // when we receive the wallet balance update lets update it
-  if(data.request.method == "blockchain.address.get_balance"){
-    var addresses = wallet.getAddresses();
-    render(<Addresses addresses={addresses} wallet={wallet}/>, document.getElementById('address-list'));
+  $scope.loadWallet = function(){
+    reddcoin.create($scope.bip39seed, $scope.password); // we wont be asking for real password until required
   }
+
+  $scope.generateSeed = function(){
+    $scope.bip39seed = wallet.getNewSeed();
+  }
+
+  $scope.formatBalance = function(addr){
+    return bitcore.util.formatValue( angular.copy(addr.confirmed) );
+  }
+
+  $scope.submitPayment = function( addressToSendFrom ){
+    reddcoin.sendPayment($scope.payment.sendTo, $scope.payment.amount, addressToSendFrom, $scope.payment.password);
+  }
+
+  /*
+    Handle Electrum Data
+   */
+  electrum.Mediator.event.on('dataReceived', function(data){
+    // when we receive the wallet balance update lets update it
+    if(data.request.method == "blockchain.address.get_balance"){
+      $scope.addresses = wallet.getAddresses();
+      $scope.$apply();
+    }
+  });
 
 });

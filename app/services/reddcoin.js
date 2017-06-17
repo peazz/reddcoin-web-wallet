@@ -38,15 +38,18 @@ module.exports = {
    * Send a transaction - TODO: Test
    * @return null
    */
-  send: function (addr, amount) {
-    this.wallet.send(amount, addr, this.monitor);
+  sendPayment: function (addr, amount, sendFrom, password) {
+
+    // amount, accIndex, requirePw, to, password, monitor
+    this.wallet.send(amount, sendFrom, false, addr, password, this.monitor);
+
   },
 
   /**
    * Get Current Wallet Instance
    * @return object
    */
-  get: function(){
+  getWallet: function(){
     return this.wallet;
   },
 

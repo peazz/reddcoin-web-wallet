@@ -112,11 +112,19 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .address {
-  &__item {}
+  &__item {
+    background: #fafafa;
+    padding: 1rem;
+    margin-bottom: 15px;
+  }
 
   &__item-send {
-    margin-bottom: 15px;
     font-size: 13px;
+    display: block;
+    clear: both;
+    margin: 10px 0 0;
+
+    input[type=text] {}
 
     h3 {
       font-weight: bold;
