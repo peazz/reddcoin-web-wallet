@@ -23,20 +23,18 @@ module.exports = {
 
       var monitor = electrum.NetworkMonitor;
 
+      alert(password);
+
       // checks its a valid mnemonic
       if(this.wallet.checkSeed(seed)){
 
         // setup wallet password
-        this.wallet.buildFromMnemonic(seed.trim(), password.trim());
+        this.wallet.buildFromMnemonic(seed.trim(), password);
 
         // response layer
         this.monitor = monitor.start(this.wallet);
 
-        // init the wallet? need to confirm
-        // expects index, name, type
         this.wallet.activateAccount(0, '');
-
-        this.wallet.toObject();
       }
 
   },
@@ -45,7 +43,7 @@ module.exports = {
    * Send a transaction - TODO: Test
    * @return null
    */
-  sendPayment: function (addr, amount, sendFrom, password) {
+  sendPayment: function (addr, amount, sendFrom, password, seed) {
 
     // amount, accIndex, requirePw, to, password, monitor
     this.wallet.send(amount, sendFrom, false, addr, password, this.monitor);

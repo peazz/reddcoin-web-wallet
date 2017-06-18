@@ -1802,7 +1802,20 @@ footer {
   font-size: 13px;
   display: block;
   clear: both;
-  margin: 10px 0 0; }
+  margin: 10px 0 0;
+  background: #f6f6f6;
+  padding: 10px; }
+  .address__item-send input[type=text],
+  .address__item-send input[type=password] {
+    font-size: 11px;
+    line-height: 30px;
+    height: 30px;
+    margin-bottom: 5px;
+    padding: 0 1rem; }
+  .address__item-send button {
+    font-size: 13px;
+    padding: 0 10px;
+    line-height: 25px; }
   .address__item-send h3 {
     font-weight: bold;
     font-size: 13px;

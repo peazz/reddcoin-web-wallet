@@ -34,7 +34,7 @@
             <img src="assets/img/Reddcoin-name.png" alt="Reddcoin Browser Wallet" />
           </div>
 
-          <div id="ticker" class="ticker" ng-controller="ticker">
+          <div id="ticker" class="ticker" ng-controller="ticker" ng-show="marketData.info">
             <span ng-show="marketData.loading"></span>
             <ul>
               <li class="ticker__currency">USD <span>{{ marketData.info.price_usd }}</span></li>
@@ -55,27 +55,24 @@
         <div class="hero" ng-if="showForm">
           <div class="container">
             <div class="row">
-              <div class="form col-sm-12">
+              <div class="form col-sm-8 col-sm-offset-2">
                 <div class="form__wrap">
                   <h1>Reddcoin HD Browser Wallet</h1>
-                  <h3 ng-show="!bip39seed">Enter your Mnemonic Phrase to Load Your Wallet</h3>
+                  <h3 ng-show="!start.bip39seed">Enter your Mnemonic Phrase to Load Your Wallet</h3>
 
+                  <form auto-fill-fix>
+                    <div class="row">
+                      <span class="col-sm-7 col-sm-offset-1">
+                        <input type="text" ng-model="start.bip39seed" placeholder="Wallet Seed"/>
+                      </span>
+                      <span class="col-md-3">
+                        <input type="password" ng-model="start.password" placeholder="Wallet Password"/>
+                      </span>
+                    </div>
 
-                  <div class="row">
-                    <span class="col-md-8">
-                      <input type="text" ng-model="bip39seed" placeholder="Wallet Seed"/>
-                    </span>
-
-                    <span class="col-md-4">
-                      <input type="password" ng-model="password" placeholder="Wallet Password"/>
-                    </span>
-                  </div>
-
-                  <button ng-click="loadWallet()">Load Wallet</button>
-
-                  <button ng-click="generateSeed()">Generate Seed</button>
-
-
+                    <button ng-click="loadWallet()">Load Wallet</button>
+                    <button ng-click="generateSeed()">Generate Seed</button>
+                  </form>
                   <div class="form__message"><small>Note: The default seed will load the test wallet being developed with at current.</small></div>
                 </div>
               </div><!-- /form -->

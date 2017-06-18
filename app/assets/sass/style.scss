@@ -255,8 +255,23 @@ footer {
     display: block;
     clear: both;
     margin: 10px 0 0;
+    background: #f6f6f6;
+    padding: 10px;
 
-    input[type=text] {}
+    input[type=text],
+    input[type=password] {
+      font-size: 11px;
+      line-height: 30px;
+      height: 30px;
+      margin-bottom: 5px;
+      padding: 0 1rem;
+    }
+
+    button {
+      font-size: 13px;
+      padding: 0 10px;
+      line-height: 25px;
+    }
 
     h3 {
       font-weight: bold;
