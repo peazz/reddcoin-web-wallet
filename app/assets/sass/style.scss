@@ -82,6 +82,7 @@ input {
   line-height: 40px;
   padding: 0 1.2rem;
   border-radius: 1px;
+  border: 1px solid #e1e1e3;
 }
 
 .form {
@@ -116,6 +117,7 @@ input[type=submit],
   &:disabled {
     background: #a2a2a2;
     opacity: 0.8;
+    cursor: none;
   }
 
   &:hover {
@@ -129,7 +131,8 @@ input[type=submit],
 }
 
 a {
-  color: #e8464c;
+  color: #1fbba6;
+  text-decoration: none !important;
 
   &:hover,
   &:focus {
@@ -138,8 +141,16 @@ a {
 }
 
 .copy-to-clip {
-  background: #75827d;
+  background: #444;
   color: white;
+}
+
+.clickable {
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
 .input-errors {
@@ -147,7 +158,7 @@ a {
   div {
     margin: -12px 0 20px;
     line-height: 1;
-    color: red;
+    color: #ca2e2e;
     font-weight: 400;
     font-size: 11px;
   }
@@ -228,18 +239,7 @@ small {
 /**
  * Footer
  */
-.footer,
-footer {
-  margin-top: 35px;
-  color: #888;
-  background: #f3f3f3;
-  padding: 25px 0;
-  color: #a2a2a2;
-
-  a {
-    color: #999;
-  }
-}
+@import "elements/footer";
 
 /**
  * Hero
@@ -275,6 +275,11 @@ footer {
     }
   }
 
+  img {
+    max-width: 220px;
+    margin: 0 0 35px;
+  }
+
   h1, h3, p {
     color: white;
   }
@@ -300,6 +305,23 @@ footer {
     font-weight: bold;
     letter-spacing: 0.05em;
     border-radius: 1px;
+    position: relative;
+
+    .icon {
+      top: 50%;
+      right: 11px;
+      transform: translateY(-50%);
+      position: absolute;
+      transition: ease .3s;
+    }
+
+    &:hover .icon {
+      right: 8px;
+    }
+
+    &.has-icon {
+      padding-right: 45px;
+    }
   }
 
   input {
@@ -358,13 +380,14 @@ footer {
 
 .tabs {
   h1 {
-    background: #bec7c4;
+    background: #222;
     color: white;
     font-size: 18px;
-    font-weight: 300;
+    font-weight: 500;
     padding: 0 15px;
     line-height: 49px;
     margin-bottom: 20px;
+    letter-spacing: -0.02em;
 
     .icon {
       margin-right: 8px;
@@ -491,7 +514,7 @@ footer {
 }
 
 .wallet-error {
-  background: red;
+  background: #ca2e2e;
   margin: 0 0 20px;
   padding: 5px 10px;
   color: white;
@@ -503,6 +526,19 @@ footer {
   box-shadow: none;
   border: 1px solid #e1e1e3;
   color: #a2a2a2;
+}
+
+.wallet-status {
+  float: right;
+  margin-right: -16px;
+  padding: 0 20px;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.wallet-watch {
+  color: white;
+  background: #ca2e2e;
 }
 
 /**
@@ -538,61 +574,7 @@ footer {
   }
 }
 
-/**
- * Price Ticker
- */
-
-.ticker {
-  width: 358px;
-  float: right;
-  padding: 10px 17px;
-  margin: -16px 0;
-  border-left: 1px solid #f1f1f3;
-  border-right: 1px solid #f1f1f3;
-
-  .percentage-down {
-    color: red;
-  }
-
-  .percentage-up {
-    color: green;
-  }
-
-  ul {
-    padding: 0;
-    margin: 0;
-
-    li {
-      width: 33.33333%;
-      float: left;
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      font-size: 11px !important;
-    }
-
-    &:last-of-type {
-      border-top: 1px solid #f1f1f3;
-      clear: both;
-      overflow: hidden;
-      margin: 0 -17px -10px;
-      padding: 10px 15px;
-    }
-  }
-
-  &__currency {
-    width: 50% !important;
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 10px !important;
-
-    span {
-      font-size: 23px;
-      display: block;
-      font-weight: 100;
-    }
-  }
-}
-
+@import "elements/ticker";
+@import "elements/posts";
 @import "fonts";
 @import "keyframes";

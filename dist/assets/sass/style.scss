@@ -12,13 +12,13 @@ html, body {
 
 html {
   font-size: 100%;
-  font-family: Roboto;
   font-weight: 300;
 }
 
 body {
   font-size: 16px;
   line-height: 1.55;
+  font-family: Roboto !important;
   background: #fafafa !important;
 }
 
@@ -81,6 +81,8 @@ input {
   width: 100%;
   line-height: 40px;
   padding: 0 1.2rem;
+  border-radius: 1px;
+  border: 1px solid #e1e1e3;
 }
 
 .form {
@@ -108,19 +110,29 @@ input[type=submit],
   outline: 0;
   cursor: pointer;
   transition: ease .2s;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  border-radius: 1px;
 
   &:disabled {
     background: #a2a2a2;
     opacity: 0.8;
+    cursor: none;
   }
 
   &:hover {
     opacity: 0.8;
   }
+
+  &.secondary {
+    background: #353535;
+    color: white;
+  }
 }
 
 a {
   color: #e8464c;
+  text-decoration: none;
 
   &:hover,
   &:focus {
@@ -131,6 +143,14 @@ a {
 .copy-to-clip {
   background: #75827d;
   color: white;
+}
+
+.clickable {
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
 .input-errors {
@@ -230,6 +250,17 @@ footer {
   a {
     color: #999;
   }
+
+  ul {
+    padding: 0;
+    list-style: none;
+    margin: 0 0 35px;
+    font-size: 18px;
+
+    a {
+      color: #222;
+    }
+  }
 }
 
 /**
@@ -266,6 +297,11 @@ footer {
     }
   }
 
+  img {
+    max-width: 220px;
+    margin: 0 0 35px;
+  }
+
   h1, h3, p {
     color: white;
   }
@@ -274,6 +310,7 @@ footer {
     font-size: 60px;
     font-weight: 100;
     margin: 0 0 35px;
+    letter-spacing: -0.04em;
   }
 
   h3 {
@@ -282,9 +319,14 @@ footer {
   }
 
   button {
-    width: 250px;
+    width: auto;
     display: inline-block;
     text-align: center;
+    line-height: 45px;
+    padding: 0 30px;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+    border-radius: 1px;
   }
 
   input {
@@ -344,12 +386,13 @@ footer {
 .tabs {
   h1 {
     background: #bec7c4;
-    color: white;
+    color: #485a53;
     font-size: 18px;
-    font-weight: 300;
+    font-weight: 500;
     padding: 0 15px;
     line-height: 49px;
     margin-bottom: 20px;
+    letter-spacing: -0.02em;
 
     .icon {
       margin-right: 8px;
@@ -412,7 +455,7 @@ footer {
 }
 
 #something-loading {
-  background: #1fbba6;
+  background: #bec7c4;
   color: white;
   z-index: 999;
   text-align: center;
@@ -523,61 +566,6 @@ footer {
   }
 }
 
-/**
- * Price Ticker
- */
-
-.ticker {
-  width: 358px;
-  float: right;
-  padding: 10px 17px;
-  margin: -16px 0;
-  border-left: 1px solid #f1f1f3;
-  border-right: 1px solid #f1f1f3;
-
-  .percentage-down {
-    color: red;
-  }
-
-  .percentage-up {
-    color: green;
-  }
-
-  ul {
-    padding: 0;
-    margin: 0;
-
-    li {
-      width: 33.33333%;
-      float: left;
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      font-size: 11px !important;
-    }
-
-    &:last-of-type {
-      border-top: 1px solid #f1f1f3;
-      clear: both;
-      overflow: hidden;
-      margin: 0 -17px -10px;
-      padding: 10px 15px;
-    }
-  }
-
-  &__currency {
-    width: 50% !important;
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 10px !important;
-
-    span {
-      font-size: 23px;
-      display: block;
-      font-weight: 100;
-    }
-  }
-}
-
+@import "elements/ticker";
 @import "fonts";
 @import "keyframes";

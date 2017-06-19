@@ -1,0 +1,52 @@
+.ticker {
+  width: 328px;
+  float: right;
+  padding: 10px 17px;
+  margin: -16px 0;
+  border-left: 1px solid #f1f1f3;
+  border-right: 1px solid #f1f1f3;
+
+  .percentage-down {
+    color: red;
+  }
+
+  .percentage-up {
+    color: green;
+  }
+
+  ul {
+    padding: 0;
+    margin: 0;
+
+    li {
+      width: 33.33333%;
+      float: left;
+      list-style: none;
+      font-weight: bold;
+      padding: 0;
+      margin: 0;
+      font-size: 11px !important;
+    }
+
+    &:last-of-type {
+      border-top: 1px solid #f1f1f3;
+      clear: both;
+      overflow: hidden;
+      margin: 0 -17px -10px;
+      padding: 10px 15px;
+    }
+  }
+
+  &__currency {
+    width: 50% !important;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px !important;
+
+    span {
+      font-size: 23px;
+      display: block;
+      font-weight: 100;
+    }
+  }
+}

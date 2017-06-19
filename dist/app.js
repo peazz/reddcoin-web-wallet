@@ -65,7 +65,7 @@
 	browserWallet.service('LocalStorageService', localStorage);
 
 	// angular
-	browserWallet.controller('addresses', function ($scope, $uibModal, $timeout) {
+	browserWallet.controller('addresses', function ($scope, $uibModal, $timeout, $rootScope) {
 
 	  $scope.start = {
 	    bip39seed: 'victory pilot network forward trend cup glass grape weird license melody shy', //'victory pilot network forward trend cup glass grape weird license melody shy',
@@ -115,8 +115,32 @@
 	    Wallet Functions
 	   */
 	  $scope.loadWallet = function () {
+
+	    var type = void 0;
+
 	    $scope.isLoading = true;
-	    reddcoin.create($scope.start.bip39seed, $scope.start.password); // we wont be asking for real password until required
+
+	    if (typeof $scope.start.password === 'undefined' || $scope.start.password.length === 0) {
+	      type = 'watch'; // cant send payments
+	    } else {
+	      type = 'encrypted'; // can send payments
+	    }
+
+	    $scope.account = type;
+
+	    if (type == 'watch') {
+
+	      // user wont be able to spend
+	      if (confirm('You didn\'t enter a password so you wont be able to make transactions, are you sure you want to do this?')) {
+	        $scope._createWallet('watch');
+	      }
+	    } else {
+	      $scope._createWallet(type);
+	    }
+	  };
+
+	  $scope._createWallet = function (type) {
+	    reddcoin.create($scope.start.bip39seed, $scope.start.password, type); // we wont be asking for real password until required
 	    $scope.start.password = ''; // clear the password
 	  };
 
@@ -142,27 +166,83 @@
 	    return isNegative ? '-' + num : num;
 	  };
 
-	  $scope.submitPayment = function (addressToSendFrom) {
+	  /*
+	    Submit Wallet Payment
+	   */
+	  $scope.submitPayment = function (form, addressToSendFrom) {
 
-	    var error = false;
+	    var sendError = false; // no send error
+	    var validations = true; // all validations pass by default
 
 	    $scope.isLoading = true; // were loading
 	    $scope.payment.error = false; // reset any errors
 
-	    try {
-	      reddcoin.sendPayment($scope.payment.sendTo, $scope.payment.amount, addressToSendFrom, $scope.payment.password, $scope.bip39seed, function () {
-	        // blank cb, but functionality exists ;)
-	      });
-	    } catch (err) {
-	      if (err) {
-	        error = true;
-	        $scope.payment.error = 'Unable to send payment, make sure your password is correct';
-	      }
+	    // validate payment data
+	    if (!$scope.isValidAddress($scope.payment.sendTo)) {
+	      $scope.paymentForm.sendTo.$setValidity("incorrectAddress", false); // custom form error for message
+	      validations = false; // failed
 	    }
 
-	    if (!error) {
-	      electrum.Mediator.event.emit('transactionAdded');
-	      $scope.payment = {}; // clear payment object to avoid leaks
+	    // validations pass lets go
+	    if (validations) {
+
+	      // exec
+	      try {
+	        reddcoin.sendPayment($scope.payment.sendTo, $scope.payment.amount, addressToSendFrom, $scope.payment.password, $scope.bip39seed, function () {
+	          // blank cb, but functionality exists ;)
+	        });
+	      } catch (err) {
+	        if (err) {
+	          sendError = true;
+	          $scope.payment.error = 'Unable to send payment, make sure your password is correct';
+	        }
+	      }
+
+	      // payment was a success
+	      if (!sendError) {
+	        // force ui update
+	        electrum.Mediator.event.emit('transactionAdded');
+	        // reset the model and ui
+	        $scope.payment = {};
+	      }
+	    }
+	  };
+
+	  $scope.isValidAddress = function (address) {
+	    return !bitcore.Address.validate(address) ? false : true;
+	  };
+
+	  /*
+	    Get Human Readable Date from
+	    Unix Timestamp
+	   */
+	  $scope.formatTransactionDate = function (unixtime) {
+	    var newDate = new Date();
+	    newDate.setTime(unixtime * 1000);
+
+	    return newDate.toUTCString();
+	  };
+
+	  $scope.getEstUsdValue = function () {
+	    return (bitcore.util.formatValue($scope.account.confirmed) * $scope.exchangeRate).toFixed(7) + ' USD';
+	  };
+
+	  /*
+	    Checks if account is watch type
+	   */
+	  $scope.isAccountSpendable = function () {
+	    return $scope.account.typeName === 'Unspendable' ? true : false;
+	  };
+
+	  /*
+	    Helpers
+	   */
+	  $scope.paymentFormIndex = -1;
+	  $scope.showPaymentForm = function (index) {
+	    if ($scope.paymentFormIndex === index) {
+	      $scope.paymentFormIndex = -1;
+	    } else {
+	      $scope.paymentFormIndex = index;
 	    }
 	  };
 
@@ -180,38 +260,44 @@
 	    });
 	  };
 
-	  $scope.formatTransactionDate = function (unixtime) {
-	    var newDate = new Date();
-	    newDate.setTime(unixtime * 1000);
-
-	    return newDate.toUTCString();
-	  };
-
-	  $scope.getEstUsdValue = function () {
-	    return (bitcore.util.formatValue($scope.account.confirmed) * $scope.exchangeRate).toFixed(7) + ' USD';
-	  };
-
 	  $scope.enableSendButton = function () {
-
-	    var address = typeof $scope.payment !== 'undefined' && $scope.payment.sendTo.length > 0 ? true : false;
-	    var amount = typeof $scope.payment !== 'undefined' && $scope.payment.amount.length > 0 ? true : false;
-	    var password = typeof $scope.payment !== 'undefined' && $scope.payment.password.length > 0 ? true : false;
-
-	    return address && amount && password ? false : true;
+	    return $scope.paymentForm.$valid ? false : true;
 	  };
 
-	  // copies input contents to clipboard
-	  $scope.copyToClipBoard = function () {};
+	  $scope.checkHasEnoughFunds = function () {
+
+	    /*
+	      TODO: test more, not sure how this works with more decimel places
+	     */
+	    var hasFunds = $scope.payment.amount > bitcore.util.formatValue($scope.account.confirmed) ? false : true;
+
+	    // validate payment data
+	    if (!hasFunds) {
+	      $scope.paymentForm.sendTo.$setValidity("notEnoughFunds", false); // custom form error for message
+	    } else {
+	      $scope.paymentForm.sendTo.$setValidity("notEnoughFunds", true); // custom form error for message
+	    }
+	  };
+
+	  $scope.sendButtonTitle = function () {
+	    if ($scope.account.type === 'watch') {
+	      return 'You didn\'t provide a password when you opened your wallet so you cannot send payments.';
+	    } else {
+	      return 'Send Reddcoin Instantly';
+	    }
+	  };
 
 	  /*
-	    Helpers
+	    When a user writes, pastes or changes
+	    the to address, check if its valid
+	    and set invalud if not on the form
 	   */
-	  $scope.paymentFormIndex = -1;
-	  $scope.showPaymentForm = function (index) {
-	    if ($scope.paymentFormIndex === index) {
-	      $scope.paymentFormIndex = -1;
+	  $scope.checkIsValidAddressOnChange = function () {
+	    // validate payment data
+	    if (!$scope.isValidAddress($scope.payment.sendTo)) {
+	      $scope.paymentForm.sendTo.$setValidity("incorrectAddress", false); // custom form error for message
 	    } else {
-	      $scope.paymentFormIndex = index;
+	      $scope.paymentForm.sendTo.$setValidity("incorrectAddress", true); // custom form error for message
 	    }
 	  };
 
@@ -271,7 +357,67 @@
 	});
 
 	/*
-	  Handles the ticker
+	  Get the latest Reddit Posts
+	 */
+	browserWallet.controller('redditPosts', function ($scope, $http, $interval, LocalStorageService) {
+
+	  $scope.postsUrl = 'https://www.reddit.com/r/reddCoin/new.json?sort=new';
+
+	  $scope.posts = {};
+
+	  $scope.loading = true;
+
+	  $scope.getRedditData = function () {
+	    if (LocalStorageService.get('redditPosts')) {
+	      $scope.posts = JSON.parse(LocalStorageService.get('redditPosts'));
+	      $scope.loading = false;
+	    } else {
+	      $http.get($scope.postsUrl).then(function (response) {
+	        var data = JSON.stringify(response.data.data.children);
+	        LocalStorageService.set('redditPosts', data);
+	        $scope.posts = JSON.parse(data);
+	        $scope.loading = false;
+	      });
+	    }
+
+	    console.log($scope.posts);
+
+	    $scope.intervalGetPriceTickerData(); // update on timer
+	  };
+
+	  $scope.intervalGetPriceTickerData = function () {
+	    $interval(function () {
+	      $scope.loading = true;
+	      $http.get($scope.postsUrl).then(function (response) {
+	        var data = JSON.stringify(response.data.data.children);
+	        LocalStorageService.set('redditPosts', data);
+	        $scope.posts = JSON.parse(data);
+	        $scope.loading = false;
+	      });
+	    }, 1000000);
+	  };
+
+	  $scope.getCommentsNumber = function (num) {
+
+	    if (num === 1) {
+	      return '1 Comment';
+	    } else {
+	      return num + ' Comments';
+	    }
+	  };
+
+	  $scope.formatDate = function (unixtime) {
+	    var newDate = new Date();
+	    newDate.setTime(unixtime * 1000);
+
+	    return newDate.toUTCString();
+	  };
+
+	  $scope.getRedditData();
+	});
+
+	/*
+	  Handle the ticker
 	 */
 	browserWallet.controller('ticker', function ($scope, $http, $interval, LocalStorageService) {
 
@@ -364,7 +510,7 @@
 	   * @param  string password
 	   * @return null
 	   */
-	  create: function create(seed, password) {
+	  create: function create(seed, password, type) {
 
 	    var monitor = electrum.NetworkMonitor;
 
@@ -377,7 +523,7 @@
 	      // response layer
 	      this.monitor = monitor.start(this.wallet);
 
-	      this.wallet.activateAccount(0);
+	      this.wallet.activateAccount(0, '', type);
 	    }
 	  },
 

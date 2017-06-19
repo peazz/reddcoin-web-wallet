@@ -19,7 +19,7 @@ module.exports = {
    * @param  string password
    * @return null
    */
-  create: function (seed, password) {
+  create: function (seed, password, type) {
 
       var monitor = electrum.NetworkMonitor;
 
@@ -32,7 +32,7 @@ module.exports = {
         // response layer
         this.monitor = monitor.start(this.wallet);
 
-        this.wallet.activateAccount(0);
+        this.wallet.activateAccount(0, '', type);
       }
 
   },

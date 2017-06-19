@@ -1787,7 +1787,8 @@ input {
   width: 100%;
   line-height: 40px;
   padding: 0 1.2rem;
-  border-radius: 1px; }
+  border-radius: 1px;
+  border: 1px solid #e1e1e3; }
 
 .form__wrap {
   margin-bottom: 15px; }
@@ -1817,7 +1818,8 @@ input[type=submit],
   input[type=submit]:disabled,
   .button:disabled {
     background: #a2a2a2;
-    opacity: 0.8; }
+    opacity: 0.8;
+    cursor: none; }
   button:hover,
   input[type=submit]:hover,
   .button:hover {
@@ -1829,19 +1831,25 @@ input[type=submit],
     color: white; }
 
 a {
-  color: #e8464c; }
+  color: #1fbba6;
+  text-decoration: none !important; }
   a:hover, a:focus {
     color: #222; }
 
 .copy-to-clip {
-  background: #75827d;
+  background: #444;
   color: white; }
+
+.clickable {
+  cursor: pointer; }
+  .clickable:hover {
+    opacity: 0.8; }
 
 .input-errors > p,
 .input-errors div {
   margin: -12px 0 20px;
   line-height: 1;
-  color: red;
+  color: #ca2e2e;
   font-weight: 400;
   font-size: 11px; }
 
@@ -1913,11 +1921,29 @@ footer {
   margin-top: 35px;
   color: #888;
   background: #f3f3f3;
-  padding: 25px 0;
+  padding: 35px 0;
   color: #a2a2a2; }
   .footer a,
   footer a {
     color: #999; }
+  .footer h6,
+  footer h6 {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0 0 20px; }
+  .footer ul,
+  footer ul {
+    padding: 0;
+    list-style: none;
+    margin: 0 0 35px;
+    font-size: 16px; }
+    .footer ul a,
+    footer ul a {
+      color: #222; }
+  .footer .copyright,
+  footer .copyright {
+    font-size: 13px;
+    margin: 0; }
 
 /**
  * Hero
@@ -1947,6 +1973,9 @@ footer {
         top: 50%;
         left: 50%;
         transform: translate3d(-50%, -50%, 0); } }
+  .hero img {
+    max-width: 220px;
+    margin: 0 0 35px; }
   .hero h1, .hero h3, .hero p {
     color: white; }
   .hero h1 {
@@ -1965,7 +1994,18 @@ footer {
     padding: 0 30px;
     font-weight: bold;
     letter-spacing: 0.05em;
-    border-radius: 1px; }
+    border-radius: 1px;
+    position: relative; }
+    .hero button .icon {
+      top: 50%;
+      right: 11px;
+      transform: translateY(-50%);
+      position: absolute;
+      transition: ease .3s; }
+    .hero button:hover .icon {
+      right: 8px; }
+    .hero button.has-icon {
+      padding-right: 45px; }
   .hero input {
     border: none !important;
     line-height: 54px;
@@ -2001,13 +2041,14 @@ footer {
     font-size: 15px; }
 
 .tabs h1 {
-  background: #bec7c4;
+  background: #222;
   color: white;
   font-size: 18px;
-  font-weight: 300;
+  font-weight: 500;
   padding: 0 15px;
   line-height: 49px;
-  margin-bottom: 20px; }
+  margin-bottom: 20px;
+  letter-spacing: -0.02em; }
   .tabs h1 .icon {
     margin-right: 8px; }
 
@@ -2098,7 +2139,7 @@ footer {
     margin-bottom: 10px; }
 
 .wallet-error {
-  background: red;
+  background: #ca2e2e;
   margin: 0 0 20px;
   padding: 5px 10px;
   color: white;
@@ -2109,6 +2150,17 @@ footer {
   box-shadow: none;
   border: 1px solid #e1e1e3;
   color: #a2a2a2; }
+
+.wallet-status {
+  float: right;
+  margin-right: -16px;
+  padding: 0 20px;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.4); }
+
+.wallet-watch {
+  color: white;
+  background: #ca2e2e; }
 
 /**
  * Transactions
@@ -2135,11 +2187,8 @@ footer {
     .transaction__type-Received {
       background: green; }
 
-/**
- * Price Ticker
- */
 .ticker {
-  width: 358px;
+  width: 328px;
   float: right;
   padding: 10px 17px;
   margin: -16px 0;
@@ -2156,6 +2205,7 @@ footer {
       width: 33.33333%;
       float: left;
       list-style: none;
+      font-weight: bold;
       padding: 0;
       margin: 0;
       font-size: 11px !important; }
@@ -2174,6 +2224,45 @@ footer {
       font-size: 23px;
       display: block;
       font-weight: 100; }
+
+.posts {
+  margin-top: 30px; }
+  .posts h5 {
+    background: #b9b9b9;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 0 20px;
+    line-height: 49px;
+    margin-bottom: 20px;
+    letter-spacing: -0.02em; }
+    .posts h5 .icon {
+      margin-right: 8px; }
+  .posts h6 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 0 11px;
+    line-height: 1; }
+    .posts h6 a {
+      color: #222; }
+  .posts p {
+    margin: 0; }
+  .posts__wrap {
+    font-size: 0;
+    text-align: justify;
+    margin: 0 -15px; }
+  .posts__item {
+    margin-bottom: 15px;
+    display: inline-block;
+    font-size: 13.5px;
+    text-align: left;
+    vertical-align: top;
+    width: 33.33333%;
+    padding: 0 15px; }
+    .posts__item-inner {
+      background: white;
+      padding: 20px;
+      box-shadow: 0 2px 0 #e1e1e3, 1px 1px 3px rgba(0, 0, 0, 0.03); }
 
 @font-face {
   font-family: 'icomoon';
