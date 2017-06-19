@@ -111,15 +111,23 @@ browserWallet.controller('addresses', function($scope, $uibModal, $timeout, $roo
    */
   $scope.formatBalance = function(num){
 
-    let isNegative = false;
+    if(typeof num !== 'undefined'){
 
-    if(num < 0){
-      isNegative = true;
-      num = Math.abs(num);
+      let isNegative = false;
+
+      if(num < 0){
+        isNegative = true;
+        num = Math.abs(num);
+      }
+
+      num = bitcore.util.formatValue( angular.copy(num) );
+
+      return isNegative ? ('-' + num) : num ;
+
+    } else {
+
+      return 0.00;
     }
-    num = bitcore.util.formatValue( angular.copy(num) );
-
-    return isNegative ? ('-' + num) : num ;
   }
 
   /*
@@ -181,6 +189,10 @@ browserWallet.controller('addresses', function($scope, $uibModal, $timeout, $roo
   }
 
   $scope.getEstUsdValue = function(){
+    if(typeof $scope.account.confirmed === 'undefined' || typeof $scope.exchangeRate  === 'undefined') {
+      return '0.00 USD';
+    }
+
     return (bitcore.util.formatValue($scope.account.confirmed) * $scope.exchangeRate).toFixed(7) + ' USD';
   }
 
@@ -225,6 +237,11 @@ browserWallet.controller('addresses', function($scope, $uibModal, $timeout, $roo
   }
 
   $scope.checkHasEnoughFunds = function(){
+
+    if(typeof $scope.account.confirmed === 'undefined'){
+      $scope.paymentForm.sendTo.$setValidity("notEnoughFunds", false); // custom form error for message
+      return;
+    }
 
     /*
       TODO: test more, not sure how this works with more decimel places
@@ -341,8 +358,6 @@ browserWallet.controller('redditPosts', function($scope, $http, $interval, Local
         $scope.loading = false;
       });
     }
-
-    console.log($scope.posts);
 
     $scope.intervalGetPriceTickerData(); // update on timer
   }

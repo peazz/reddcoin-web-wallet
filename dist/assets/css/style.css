@@ -1926,6 +1926,9 @@ footer {
   .footer a,
   footer a {
     color: #999; }
+    .footer a:hover,
+    footer a:hover {
+      color: #1fbba6; }
   .footer h6,
   footer h6 {
     font-size: 18px;
@@ -1943,7 +1946,7 @@ footer {
   .footer .copyright,
   footer .copyright {
     font-size: 13px;
-    margin: 0; }
+    margin: 0 0 -15px; }
 
 /**
  * Hero
@@ -2002,7 +2005,7 @@ footer {
       transform: translateY(-50%);
       position: absolute;
       transition: ease .3s; }
-    .hero button:hover .icon {
+    .hero button:not(:disabled):hover .icon {
       right: 8px; }
     .hero button.has-icon {
       padding-right: 45px; }

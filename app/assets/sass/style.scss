@@ -315,7 +315,7 @@ small {
       transition: ease .3s;
     }
 
-    &:hover .icon {
+    &:not(:disabled):hover .icon {
       right: 8px;
     }
 

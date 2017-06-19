@@ -68,7 +68,7 @@
 	browserWallet.controller('addresses', function ($scope, $uibModal, $timeout, $rootScope) {
 
 	  $scope.start = {
-	    bip39seed: 'victory pilot network forward trend cup glass grape weird license melody shy', //'victory pilot network forward trend cup glass grape weird license melody shy',
+	    bip39seed: '', //'victory pilot network forward trend cup glass grape weird license melody shy',
 	    password: ''
 	  };
 
@@ -155,15 +155,22 @@
 	   */
 	  $scope.formatBalance = function (num) {
 
-	    var isNegative = false;
+	    if (typeof num !== 'undefined') {
 
-	    if (num < 0) {
-	      isNegative = true;
-	      num = Math.abs(num);
+	      var isNegative = false;
+
+	      if (num < 0) {
+	        isNegative = true;
+	        num = Math.abs(num);
+	      }
+
+	      num = bitcore.util.formatValue(angular.copy(num));
+
+	      return isNegative ? '-' + num : num;
+	    } else {
+
+	      return 0.00;
 	    }
-	    num = bitcore.util.formatValue(angular.copy(num));
-
-	    return isNegative ? '-' + num : num;
 	  };
 
 	  /*
@@ -224,6 +231,10 @@
 	  };
 
 	  $scope.getEstUsdValue = function () {
+	    if (typeof $scope.account.confirmed === 'undefined' || typeof $scope.exchangeRate === 'undefined') {
+	      return '0.00 USD';
+	    }
+
 	    return (bitcore.util.formatValue($scope.account.confirmed) * $scope.exchangeRate).toFixed(7) + ' USD';
 	  };
 
@@ -265,6 +276,11 @@
 	  };
 
 	  $scope.checkHasEnoughFunds = function () {
+
+	    if (typeof $scope.account.confirmed === 'undefined') {
+	      $scope.paymentForm.sendTo.$setValidity("notEnoughFunds", false); // custom form error for message
+	      return;
+	    }
 
 	    /*
 	      TODO: test more, not sure how this works with more decimel places
@@ -379,8 +395,6 @@
 	        $scope.loading = false;
 	      });
 	    }
-
-	    console.log($scope.posts);
 
 	    $scope.intervalGetPriceTickerData(); // update on timer
 	  };
