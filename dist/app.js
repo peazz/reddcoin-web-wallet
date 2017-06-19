@@ -336,9 +336,17 @@
 
 	  // wallet transaction
 	  electrum.Mediator.event.on('transactionAdded', function () {
+
 	    $scope.transactions = wallet.getTransactions();
 	    $scope.account = wallet.getAccountInfo()[0];
 	    $scope.tipjar = wallet.getTipJar();
+
+	    $timeout(function () {
+	      $scope.transactions = wallet.getTransactions();
+	      $scope.account = wallet.getAccountInfo()[0];
+	      $scope.tipjar = wallet.getTipJar();
+	    }, 3000);
+
 	    $scope.$evalAsync();
 	  });
 

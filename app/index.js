@@ -298,10 +298,20 @@ browserWallet.controller('addresses', function($scope, $uibModal, $timeout, $roo
 
   // wallet transaction
   electrum.Mediator.event.on('transactionAdded', function( ){
+
     $scope.transactions = wallet.getTransactions();
     $scope.account = wallet.getAccountInfo()[0];
     $scope.tipjar = wallet.getTipJar();
+
+
+    $timeout(function(){
+      $scope.transactions = wallet.getTransactions();
+      $scope.account = wallet.getAccountInfo()[0];
+      $scope.tipjar = wallet.getTipJar();
+    }, 3000);
+
     $scope.$evalAsync();
+
   });
 
   electrum.Mediator.event.on('idle', function(data){
@@ -316,6 +326,7 @@ browserWallet.controller('addresses', function($scope, $uibModal, $timeout, $roo
       //$scope.addresses = wallet.getAddresses();
       //$scope.$apply();
     }
+
   });
 
   // cross controller comms
