@@ -21,7 +21,7 @@ browserWallet.service('LocalStorageService', localStorage);
 browserWallet.controller('addresses', function($scope, $uibModal, $timeout, $rootScope) {
 
   $scope.start = {
-    bip39seed: 'victory pilot network forward trend cup glass grape weird license melody shy',//'victory pilot network forward trend cup glass grape weird license melody shy',
+    bip39seed: '',//'victory pilot network forward trend cup glass grape weird license melody shy',
     password: ''
   };
 
