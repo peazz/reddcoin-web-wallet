@@ -83,6 +83,12 @@
         <div class="container" id="theApp">
           <div class="row">
 
+            <div id="overview" class="col-md-12" ng-if="account">
+              <h2 class="heading">Your Balance</h2>
+              <div class="balance__confirmed">Confirmed {{ formatBalance(account.confirmed) }} RDD</div>
+              <div class="balance__unconfirmed">Unconfirmed {{ formatBalance(account.unconfirmed) }} RDD</div>
+            </div>
+
             <div id="addresses" class="col-md-4">
               <h2 ng-if="!showForm" class="heading">Wallet Addresses</h2>
               <div class="address__item" ng-repeat="(address, obj) in addresses track by $index">

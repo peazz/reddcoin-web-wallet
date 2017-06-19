@@ -1,6 +1,7 @@
-// app services
+  // app services
 const reddcoin = require('./services/reddcoin.js');
-const wallet = reddcoin.getWallet();
+const wallet = reddcoin.getWalletInstance();
+window.wallet = wallet;
 
 // Angular Services Register
 const localStorage = require('./services/ls.js');
@@ -13,8 +14,17 @@ browserWallet.service('LocalStorageService', localStorage);
 browserWallet.controller('addresses', function($scope) {
 
   $scope.start = {
-    bip39seed: 'victory pilot network forward trend cup glass grape weird license melody shy',
+    bip39seed: 'victory pilot network forward trend cup glass grape weird license melody shy',//'victory pilot network forward trend cup glass grape weird license melody shy',
     password: ''
+  };
+
+  // tipjar?
+  $scope.tipjar = {};
+
+  // holds overal account details
+  $scope.account = {
+    confirmed:0,
+    unconfirmed: 0
   };
 
   // addresses
@@ -42,7 +52,7 @@ browserWallet.controller('addresses', function($scope) {
   }
 
   $scope.generateSeed = function(){
-    $scope.bip39seed = wallet.getNewSeed();
+    $scope.start.bip39seed = wallet.getNewSeed();
   }
 
   $scope.formatBalance = function(num){
@@ -83,11 +93,18 @@ browserWallet.controller('addresses', function($scope) {
     $scope.addresses[ data.address ] = data;
     $scope.showForm = false;
     $scope.$evalAsync();
+
   });
 
   // wallet transaction
   electrum.Mediator.event.on('transactionAdded', function( ){
     $scope.transactions = wallet.getTransactions();
+    $scope.account = wallet.getAccountInfo()[0];
+    $scope.tipjar = wallet.getTipJar();
+
+    console.log($scope.account);
+    console.log(wallet.getTipJar());
+
     $scope.$evalAsync();
   });
 
@@ -108,8 +125,6 @@ browserWallet.controller('addresses', function($scope) {
       //$scope.$apply();
     }
   });
-
-  console.log(wallet);
 
 });
 

@@ -48,7 +48,8 @@
 
 	// app services
 	var reddcoin = __webpack_require__(1);
-	var wallet = reddcoin.getWallet();
+	var wallet = reddcoin.getWalletInstance();
+	window.wallet = wallet;
 
 	// Angular Services Register
 	var localStorage = __webpack_require__(2);
@@ -61,8 +62,17 @@
 	browserWallet.controller('addresses', function ($scope) {
 
 	  $scope.start = {
-	    bip39seed: 'victory pilot network forward trend cup glass grape weird license melody shy',
+	    bip39seed: 'victory pilot network forward trend cup glass grape weird license melody shy', //'victory pilot network forward trend cup glass grape weird license melody shy',
 	    password: ''
+	  };
+
+	  // tipjar?
+	  $scope.tipjar = {};
+
+	  // holds overal account details
+	  $scope.account = {
+	    confirmed: 0,
+	    unconfirmed: 0
 	  };
 
 	  // addresses
@@ -90,7 +100,7 @@
 	  };
 
 	  $scope.generateSeed = function () {
-	    $scope.bip39seed = wallet.getNewSeed();
+	    $scope.start.bip39seed = wallet.getNewSeed();
 	  };
 
 	  $scope.formatBalance = function (num) {
@@ -136,6 +146,12 @@
 	  // wallet transaction
 	  electrum.Mediator.event.on('transactionAdded', function () {
 	    $scope.transactions = wallet.getTransactions();
+	    $scope.account = wallet.getAccountInfo()[0];
+	    $scope.tipjar = wallet.getTipJar();
+
+	    console.log($scope.account);
+	    console.log(wallet.getTipJar());
+
 	    $scope.$evalAsync();
 	  });
 
@@ -154,8 +170,6 @@
 	      //$scope.$apply();
 	    }
 	  });
-
-	  console.log(wallet);
 	});
 
 	// controllers
@@ -250,8 +264,6 @@
 
 	    var monitor = electrum.NetworkMonitor;
 
-	    alert(password);
-
 	    // checks its a valid mnemonic
 	    if (this.wallet.checkSeed(seed)) {
 
@@ -261,7 +273,7 @@
 	      // response layer
 	      this.monitor = monitor.start(this.wallet);
 
-	      this.wallet.activateAccount(0, '');
+	      this.wallet.activateAccount(0);
 	    }
 	  },
 
@@ -270,7 +282,6 @@
 	   * @return null
 	   */
 	  sendPayment: function sendPayment(addr, amount, sendFrom, password, seed) {
-
 	    // amount, accIndex, requirePw, to, password, monitor
 	    this.wallet.send(amount, sendFrom, false, addr, password, this.monitor);
 	  },
@@ -279,7 +290,7 @@
 	   * Get Current Wallet Instance
 	   * @return object
 	   */
-	  getWallet: function getWallet() {
+	  getWalletInstance: function getWalletInstance() {
 	    return this.wallet;
 	  },
 

@@ -23,8 +23,6 @@ module.exports = {
 
       var monitor = electrum.NetworkMonitor;
 
-      alert(password);
-
       // checks its a valid mnemonic
       if(this.wallet.checkSeed(seed)){
 
@@ -34,7 +32,7 @@ module.exports = {
         // response layer
         this.monitor = monitor.start(this.wallet);
 
-        this.wallet.activateAccount(0, '');
+        this.wallet.activateAccount(0);
       }
 
   },
@@ -44,17 +42,15 @@ module.exports = {
    * @return null
    */
   sendPayment: function (addr, amount, sendFrom, password, seed) {
-
     // amount, accIndex, requirePw, to, password, monitor
     this.wallet.send(amount, sendFrom, false, addr, password, this.monitor);
-
   },
 
   /**
    * Get Current Wallet Instance
    * @return object
    */
-  getWallet: function(){
+  getWalletInstance: function(){
     return this.wallet;
   },
 
