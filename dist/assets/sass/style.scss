@@ -12,8 +12,8 @@ html, body {
 
 html {
   font-size: 100%;
-  font-family: sans-serif;
-  font-weight: 100;
+  font-family: Roboto;
+  font-weight: 300;
 }
 
 body {
@@ -25,6 +25,16 @@ body {
 #page {
   width: 100%;
   overflow: hidden;
+}
+
+html,
+body,
+#page,
+#app,
+.hero {
+  &:not(.app-active) {
+    height: 100%;
+  }
 }
 
 /**
@@ -40,6 +50,29 @@ img {
  * Grid
  */
 @import "global/bootstrap";
+
+.modal {
+  z-index: 9999999 !important;
+}
+
+.modal-content {
+  padding: 25px;
+  overflow: hidden;
+}
+
+.modal-dialog {
+  top: 50%;
+  transform: translateY(-50%) !important;
+  margin: 0 auto;
+
+  h3 {
+    margin: 0 0 15px;
+  }
+
+  input {
+    margin: 0 0 20px;
+  }
+}
 
 /**
  * Forms
@@ -71,18 +104,94 @@ input[type=submit],
   border-radius: 0;
   font-size: 14px;
   line-height: 40px;
-  padding: 0 1.2rem;
+  padding: 0 1.5rem;
   outline: 0;
+  cursor: pointer;
+  transition: ease .2s;
+
+  &:disabled {
+    background: #a2a2a2;
+    opacity: 0.8;
+  }
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+a {
+  color: #e8464c;
+
+  &:hover,
+  &:focus {
+    color: #222;
+  }
+}
+
+.copy-to-clip {
+  background: #75827d;
+  color: white;
+}
+
+.input-errors {
+  > p,
+  div {
+    margin: -12px 0 20px;
+    line-height: 1;
+    color: red;
+    font-weight: 400;
+    font-size: 11px;
+  }
+}
+
+.table {
+  margin: 0;
+
+  > thead > tr > th {
+    border: none;
+  }
+}
+
+.icon-sync2 {
+  -webkit-animation-name: spin;
+  -webkit-animation-duration: 2000ms;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+  -moz-animation-name: spin;
+  -moz-animation-duration: 2000ms;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-timing-function: linear;
+  -ms-animation-name: spin;
+  -ms-animation-duration: 2000ms;
+  -ms-animation-iteration-count: infinite;
+  -ms-animation-timing-function: linear;
+  animation-name: spin;
+  animation-duration: 2000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
 }
 
 /**
- * Type
- */
+* Type
+*/
 h1, h2, h3, h4, h5, h6 {
   line-height: 1;
   margin-top: 0;
   color: #111;
   font-weight: 400;
+}
+
+.heading {
+  font-size: 16px;
+
+  /* text-transform: uppercase; */
+  font-weight: 500;
+  letter-spacing: 0.023em;
+  margin-bottom: 15px;
+}
+
+small {
+  font-size: 11px;
 }
 
 /**
@@ -92,9 +201,13 @@ h1, h2, h3, h4, h5, h6 {
 #header {
   background: white;
   padding: 13px 13px 16px;
-  margin-bottom: 15px;
   overflow: hidden;
   border-bottom: 1px solid #f1f1f3;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999999;
 
   .logo {
     width: 158px;
@@ -104,21 +217,215 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /**
+ * Footer
+ */
+.footer,
+footer {
+  margin-top: 35px;
+  color: #888;
+  background: #f3f3f3;
+  padding: 25px 0;
+  color: #a2a2a2;
+
+  a {
+    color: #999;
+  }
+}
+
+/**
  * Hero
  */
 .hero {
-  background: url(/assets/img/globe2.jpg) center center no-repeat;
+  background: url(../img/globe2.jpg) center center no-repeat;
   background-size: cover !important;
+  position: relative;
+  color: white;
+
+  &:after {
+    content: '';
+    background: black;
+    opacity: 0.4;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+
+    @media screen and (min-width: 768px) {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate3d(-50%, -50%, 0);
+    }
+  }
+
+  h1, h3, p {
+    color: white;
+  }
+
+  h1 {
+    font-size: 60px;
+    font-weight: 100;
+    margin: 0 0 35px;
+  }
+
+  h3 {
+    font-weight: 300;
+    margin: 0 0 35px;
+  }
+
+  button {
+    width: 250px;
+    display: inline-block;
+    text-align: center;
+  }
+
+  input {
+    border: none !important;
+    line-height: 54px;
+    padding: 0 25px;
+  }
+
+  .form {
+    &__wrap {
+      .row {
+        margin-bottom: 25px;
+      }
+    }
+
+    &__message {
+      display: block;
+      line-height: 1;
+      margin-top: 35px;
+    }
+  }
+}
+
+#theApp {
+  margin-top: 127px;
+}
+
+#tab-navigation {
+  padding: 0;
+  margin: 0;
+
+  ul, li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    padding: 0 15px;
+    line-height: 49px;
+    font-size: 18px;
+
+    &.active {
+      background: white;
+    }
+  }
+
+  .icon-chevron-right {
+    position: absolute;
+    top: 50%;
+    right: 26px;
+    transform: translateY(-50%);
+    font-size: 15px;
+  }
+}
+
+.tabs {
+  h1 {
+    background: #bec7c4;
+    color: white;
+    font-size: 18px;
+    font-weight: 300;
+    padding: 0 15px;
+    line-height: 49px;
+    margin-bottom: 20px;
+
+    .icon {
+      margin-right: 8px;
+    }
+  }
+
+  &__item {
+    margin: 0;
+    display: none;
+
+    &.active {
+      display: block;
+    }
+  }
+
+  .inner {
+    background: white;
+    padding: 25.5px;
+    margin-bottom: 20px;
+  }
+}
+
+.balance {
+  &__confirmed {
+    font-size: 36px;
+    margin: 0 0 10px;
+    line-height: 1;
+    color: #111;
+    font-weight: 400;
+  }
+
+  &__unconfirmed {
+    margin-bottom: 2px;
+  }
+
+  &__usdequiv {
+    margin-bottom: 15px;
+  }
+}
+
+#overview {
+  background: #efefef !important;
+  color: #222;
+  padding: 30px;
+  position: relative;
+
+  h2 {
+    color: white;
+  }
+
+  button {}
+
+  .icon-sync2 {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 20px;
+    z-index: 99;
+  }
+}
+
+#something-loading {
+  background: #1fbba6;
+  color: white;
+  z-index: 999;
+  text-align: center;
+  font-size: 19px;
+  padding: 18px;
+  margin: 35px 0 -35px;
 }
 
 /**
  * Addresses
  */
 #addresses,
-#transactions {
-  padding: 16px;
-  padding: 1rem;
-}
+#transactions {}
 
 #address-list {
   margin: 0 0 20px;
@@ -131,9 +438,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .address {
   &__item {
-    background: #fafafa;
+    background: white;
     padding: 1rem;
     margin-bottom: 15px;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
   }
 
   &__item-send {
@@ -141,8 +449,23 @@ h1, h2, h3, h4, h5, h6 {
     display: block;
     clear: both;
     margin: 10px 0 0;
+    background: #f6f6f6;
+    padding: 10px;
 
-    input[type=text] {}
+    input[type=text],
+    input[type=password] {
+      font-size: 11px;
+      line-height: 30px;
+      height: 30px;
+      margin-bottom: 5px;
+      padding: 0 1rem;
+    }
+
+    button {
+      font-size: 13px;
+      padding: 0 10px;
+      line-height: 25px;
+    }
 
     h3 {
       font-weight: bold;
@@ -150,6 +473,21 @@ h1, h2, h3, h4, h5, h6 {
       margin-bottom: 10px;
     }
   }
+}
+
+.wallet-error {
+  background: red;
+  margin: 0 0 20px;
+  padding: 5px 10px;
+  color: white;
+  font-weight: 300;
+}
+
+.wallet-address {
+  background: #fafafa;
+  box-shadow: none;
+  border: 1px solid #e1e1e3;
+  color: #a2a2a2;
 }
 
 /**
@@ -169,11 +507,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .transaction {
+  margin-bottom: 7px;
+  font-size: 15px;
+
   &__type {
     background: #222;
     color: white;
     padding: 3px 5px;
-    font-size: 9px;
+    font-size: 8px;
     vertical-align: middle;
 
     &-Received {
@@ -187,7 +528,7 @@ h1, h2, h3, h4, h5, h6 {
  */
 
 .ticker {
-  width: 318px;
+  width: 358px;
   float: right;
   padding: 10px 17px;
   margin: -16px 0;
@@ -237,3 +578,6 @@ h1, h2, h3, h4, h5, h6 {
     }
   }
 }
+
+@import "fonts";
+@import "keyframes";

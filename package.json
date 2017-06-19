@@ -5,6 +5,8 @@
   "main": "index.js",
   "dependencies": {
     "angular": "^1.6.4",
+    "angular-bootstrap-lightbox": "^0.12.0",
+    "angular-ui-bootstrap": "^2.5.0",
     "bootstrap": "^3.3.7",
     "bootstrap-sass": "^3.3.7",
     "jquery": "^3.2.1",
@@ -24,7 +26,7 @@
     "babel-preset-flow": "^6.23.0",
     "babel-preset-react": "^6.24.1",
     "copy-webpack-plugin": "^4.0.1",
-    "css-loader": "^0.10.1",
+    "css-loader": "^0.28.4",
     "expose": "^0.1.4",
     "expose-loader": "^0.7.3",
     "fs-extra": "^0.10.0",
