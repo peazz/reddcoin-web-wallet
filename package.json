@@ -11,8 +11,6 @@
     "bootstrap-sass": "^3.3.7",
     "jquery": "^3.2.1",
     "path": "^0.12.7",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
     "reddcoin-electrum-js": "peazz/reddcoin-electrum-js",
     "reddcore": "^0.1.40"
   },
