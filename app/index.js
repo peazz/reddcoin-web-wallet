@@ -281,7 +281,7 @@ browserWallet.controller('addresses', function($scope, $uibModal, $timeout, $roo
   /*
     Handle Electrum Data
    */
-
+ 
   // browser api creates addresses
   electrum.Mediator.event.on('addressCreated', function(data){
 
