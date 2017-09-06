@@ -289,20 +289,20 @@ browserWallet.controller('addresses', function($scope, $uibModal, $timeout, $roo
       $scope.addresses[ data.address ] = {}
     }
 
+
     $scope.depositAddress = wallet.getAddresses()[0];
     $scope.addresses[ data.address ] = data;
     $scope.showForm = false;
     $scope.$evalAsync();
 
-  });
+  });  
 
   // wallet transaction
-  electrum.Mediator.event.on('transactionAdded', function( ){
+  electrum.Mediator.event.on('transactionAdded', function(data){
 
     $scope.transactions = wallet.getTransactions();
     $scope.account = wallet.getAccountInfo()[0];
     $scope.tipjar = wallet.getTipJar();
-
 
     $timeout(function(){
       $scope.transactions = wallet.getTransactions();
@@ -321,6 +321,9 @@ browserWallet.controller('addresses', function($scope, $uibModal, $timeout, $roo
 
   // anything in from requests here
   electrum.Mediator.event.on('dataReceived', function(data){
+
+
+
     // when we receive the wallet balance update lets update it
     if(data.request.method == "blockchain.address.get_balance"){
       //$scope.addresses = wallet.getAddresses();

@@ -335,7 +335,7 @@
 	  });
 
 	  // wallet transaction
-	  electrum.Mediator.event.on('transactionAdded', function () {
+	  electrum.Mediator.event.on('transactionAdded', function (data) {
 
 	    $scope.transactions = wallet.getTransactions();
 	    $scope.account = wallet.getAccountInfo()[0];
@@ -357,6 +357,7 @@
 
 	  // anything in from requests here
 	  electrum.Mediator.event.on('dataReceived', function (data) {
+
 	    // when we receive the wallet balance update lets update it
 	    if (data.request.method == "blockchain.address.get_balance") {
 	      //$scope.addresses = wallet.getAddresses();
