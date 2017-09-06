@@ -688,11 +688,11 @@
 
 	'use strict';
 
-	angular.module('ui.bootstrap.multiMap', []
+	angular.module('ui.bootstrap.multiMap', [])
 	/**
 	 * A helper, internal data structure that stores all references attached to key
 	 */
-	).factory('$$multiMap', function () {
+	.factory('$$multiMap', function () {
 	  return {
 	    createNew: function createNew() {
 	      var map = {};
@@ -764,7 +764,7 @@
 
 	'use strict';
 
-	angular.module('ui.bootstrap.position', []
+	angular.module('ui.bootstrap.position', [])
 
 	/**
 	 * A set of utility methods for working with the DOM.
@@ -772,7 +772,7 @@
 	 * relation to another element (this is the case for tooltips, popovers,
 	 * typeahead suggestions etc.).
 	 */
-	).factory('$uibPosition', ['$document', '$window', function ($document, $window) {
+	.factory('$uibPosition', ['$document', '$window', function ($document, $window) {
 	  /**
 	   * Used by scrollbarWidth() function to cache scrollbar's width.
 	   * Do not access this variable directly, use scrollbarWidth() instead.
@@ -1397,12 +1397,12 @@
 
 	'use strict';
 
-	angular.module('ui.bootstrap.stackedMap', []
+	angular.module('ui.bootstrap.stackedMap', [])
 	/**
 	 * A helper, internal data structure that acts as a map but also allows getting / removing
 	 * elements in the LIFO order
 	 */
-	).factory('$$stackedMap', function () {
+	.factory('$$stackedMap', function () {
 	  return {
 	    createNew: function createNew() {
 	      var stack = [];
@@ -1468,12 +1468,12 @@
 
 	'use strict';
 
-	angular.module('ui.bootstrap.modal', ['ui.bootstrap.multiMap', 'ui.bootstrap.stackedMap', 'ui.bootstrap.position']
+	angular.module('ui.bootstrap.modal', ['ui.bootstrap.multiMap', 'ui.bootstrap.stackedMap', 'ui.bootstrap.position'])
 	/**
 	 * Pluggable resolve mechanism for the modal resolve resolution
 	 * Supports UI Router's $resolve service
 	 */
-	).provider('$uibResolve', function () {
+	.provider('$uibResolve', function () {
 	  var resolve = this;
 	  this.resolver = null;
 
@@ -1513,12 +1513,12 @@
 	      }
 	    };
 	  }];
-	}
+	})
 
 	/**
 	 * A helper directive for the $modal service. It creates a backdrop element.
 	 */
-	).directive('uibModalBackdrop', ['$animate', '$injector', '$uibModalStack', function ($animate, $injector, $modalStack) {
+	.directive('uibModalBackdrop', ['$animate', '$injector', '$uibModalStack', function ($animate, $injector, $modalStack) {
 	  return {
 	    restrict: 'A',
 	    compile: function compile(tElement, tAttrs) {

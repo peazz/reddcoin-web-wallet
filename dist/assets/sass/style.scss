@@ -131,8 +131,8 @@ input[type=submit],
 }
 
 a {
-  color: #e8464c;
-  text-decoration: none;
+  color: #1fbba6;
+  text-decoration: none !important;
 
   &:hover,
   &:focus {
@@ -141,7 +141,7 @@ a {
 }
 
 .copy-to-clip {
-  background: #75827d;
+  background: #444;
   color: white;
 }
 
@@ -158,7 +158,7 @@ a {
   div {
     margin: -12px 0 20px;
     line-height: 1;
-    color: red;
+    color: #ca2e2e;
     font-weight: 400;
     font-size: 11px;
   }
@@ -239,29 +239,7 @@ small {
 /**
  * Footer
  */
-.footer,
-footer {
-  margin-top: 35px;
-  color: #888;
-  background: #f3f3f3;
-  padding: 25px 0;
-  color: #a2a2a2;
-
-  a {
-    color: #999;
-  }
-
-  ul {
-    padding: 0;
-    list-style: none;
-    margin: 0 0 35px;
-    font-size: 18px;
-
-    a {
-      color: #222;
-    }
-  }
-}
+@import "elements/footer";
 
 /**
  * Hero
@@ -327,6 +305,23 @@ footer {
     font-weight: bold;
     letter-spacing: 0.05em;
     border-radius: 1px;
+    position: relative;
+
+    .icon {
+      top: 50%;
+      right: 11px;
+      transform: translateY(-50%);
+      position: absolute;
+      transition: ease .3s;
+    }
+
+    &:not(:disabled):hover .icon {
+      right: 8px;
+    }
+
+    &.has-icon {
+      padding-right: 45px;
+    }
   }
 
   input {
@@ -385,8 +380,8 @@ footer {
 
 .tabs {
   h1 {
-    background: #bec7c4;
-    color: #485a53;
+    background: #222;
+    color: white;
     font-size: 18px;
     font-weight: 500;
     padding: 0 15px;
@@ -455,7 +450,7 @@ footer {
 }
 
 #something-loading {
-  background: #bec7c4;
+  background: #1fbba6;
   color: white;
   z-index: 999;
   text-align: center;
@@ -519,7 +514,7 @@ footer {
 }
 
 .wallet-error {
-  background: red;
+  background: #ca2e2e;
   margin: 0 0 20px;
   padding: 5px 10px;
   color: white;
@@ -531,6 +526,19 @@ footer {
   box-shadow: none;
   border: 1px solid #e1e1e3;
   color: #a2a2a2;
+}
+
+.wallet-status {
+  float: right;
+  margin-right: -16px;
+  padding: 0 20px;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.wallet-watch {
+  color: white;
+  background: #ca2e2e;
 }
 
 /**
@@ -567,5 +575,6 @@ footer {
 }
 
 @import "elements/ticker";
+@import "elements/posts";
 @import "fonts";
 @import "keyframes";
