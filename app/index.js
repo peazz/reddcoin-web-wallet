@@ -16,7 +16,7 @@ const modal = require('angular-ui-bootstrap/src/modal/index-nocss.js');
 window.wallet = wallet; // access it anywhere
 browserWallet = angular.module('browserWallet', [modal, 'ngClickCopy']);
 browserWallet.service('LocalStorageService', localStorage);
-
+ 
 // angular
 browserWallet.controller('addresses', function($scope, $uibModal, $timeout, $rootScope) {
 
