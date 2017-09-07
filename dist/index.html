@@ -61,7 +61,7 @@
                 <div class="form__wrap">
                   <img src="assets/img/Reddcoin-logo.png" alt="Reddcoin Brand Logo" />
                   <h1>Reddcoin Browser Wallet</h1>
-                  <h3 ng-show="!start.bip39seed">Enter your Mnemonic Phrase to Load Your Wallet or click generate wallet seed to create a random seed and create a new Reddcoin wallet.</h3>
+                  <h3 ng-show="!start.bip39seed">Enter your Mnemonic Phrase to load your wallet or click 'generate wallet seed' to create a random seed and create a new Reddcoin wallet.</h3>
                   <form name="startForm" auto-fill-fix>
                     <div class="row">
                       <span class="col-sm-8">
@@ -152,7 +152,7 @@
                 <script type="text/ng-template" id="sendPaymentModal.html">
                   <form name="paymentForm">
                     <h3>Send a Payment</h3>
-                    <p>Sending a payment from your web wallet is easy and secure, simply enter the adress you wish to send too, the amount and your wallet password.</p>
+                    <p>Sending a payment from your web wallet is easy and secure, simply enter the adress you wish to send to, the amount and your wallet password.</p>
 
                     <p class="available-to-spend">Available Balance: <span class="clickable" ng-click="payment.amount = formatBalance(account.confirmed)">{{ formatBalance( account.confirmed ) }}</span></p>
 
@@ -225,7 +225,7 @@
             <li><a href="https://github.com/reddcoin-project/reddcoin/releases" target="_blank">Reddcoin GitHub</a></li>
           </ul>
 
-          <p class="copyright">&copy; Copyright 2017 Reddcoin Team & <a href="http://pixelbin.com" target="_blank">Pixebin</a></p>
+          <p class="copyright">&copy; Copyright 2017 Reddcoin Team & <a href="http://pixelbin.com" target="_blank">Pixelbin</a></p>
         </div>
       </footer>
     </div><!-- /page -->
